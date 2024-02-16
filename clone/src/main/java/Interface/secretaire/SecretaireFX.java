@@ -11,6 +11,7 @@ import java.util.*;
 import javafx.animation.TranslateTransition;
 import javafx.event.*;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -36,22 +37,27 @@ public class SecretaireFX extends Application {
         Button requetes = new Button("Consulter Requetes");
         Button liste = new Button("Liste des Rendez-vous");
         Button profil = new Button("Profil");
+        Button menuButton = new Button("Menu");
 //        Button deconnexion = new Button("Déconnexion");
 
         bonjour.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
         bonjour.setTextFill(Color.DARKGRAY);
-
-        ImageView profilIcon = new ImageView(new Image(getClass().getResourceAsStream("/interface/secretaire/images/profil.png")));
+        
+        
+        ImageView profilIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/profil.png")));
         profilIcon.setFitHeight(50);
         profilIcon.setFitWidth(50);
         profil.setGraphic(profilIcon);
+
+        menuButton.prefWidthProperty().bind(profil.widthProperty());
+        menuButton.prefHeightProperty().bind(profil.heightProperty());
 
 //        ImageView deconnexionIcon = new ImageView(new Image(getClass().getResourceAsStream("/interface/secretaire/images/deconnecter.png")));
 //        deconnexionIcon.setFitHeight(20);
 //        deconnexionIcon.setFitWidth(20);
 //        deconnexion.setGraphic(deconnexionIcon);
-        ImageView logo = new ImageView(new Image("/interface/secretaire/images/logo.png"));
+        ImageView logo = new ImageView(new Image("/images/logo.png"));
         logo.setFitHeight(100);
         logo.setFitWidth(200);
 
@@ -80,7 +86,7 @@ public class SecretaireFX extends Application {
         menu.setPadding(insets);
         menu.setStyle("-fx-background-color: #333;");
 
-        HBox headerButtons = new HBox();
+        HBox headerButtons = new HBox(50);
 
         header.setStyle("-fx-background-color: #444;");
         AnchorPane.setTopAnchor(logo, 10.0);
@@ -130,7 +136,7 @@ public class SecretaireFX extends Application {
         BorderPane.setMargin(panelVide, new Insets(10));
 
         Profil profilPanel = new Profil();
-
+        profilPanel.showMaxSize();
 //                VBox content = new VBox();
 //        content.getChildren().addAll(root, profilPanel);
 //
@@ -142,30 +148,6 @@ public class SecretaireFX extends Application {
         root.setCenter(panelVide);
 
         // Action à effectuer lorsque le bouton profil est cliqué
-        profil.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                if (!isProfilOpen) {
-                    // Afficher le panneau Profil
-                    StackPane stackPane = new StackPane();
-                    stackPane.getChildren().addAll(root.getCenter(), profilPanel);
-                    StackPane.setAlignment(profilPanel, Pos.CENTER);
-                    root.setPrefSize(profilPanel.getPrefWidth(), profilPanel.getPrefHeight());
-                    root.setCenter(stackPane);
-//                    root.setCenter(profilPanel);
-                    profilPanel.toFront();
-                    profilPanel.show();
-
-                } else {
-                    // Cacher le panneau Profil
-                    profilPanel.hide();
-                }
-                isProfilOpen = !isProfilOpen;
-
-            }
-        });
-
 //        // Action à effectuer lorsque la souris passe sur le bouton
 //        profil.setOnMouseEntered(new EventHandler<MouseEvent>() {
 //            @Override
@@ -355,8 +337,62 @@ public class SecretaireFX extends Application {
         primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 System.out.println("oui");
+                root.getChildren().add(menu);
+
+                profil.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        if (!isProfilOpen) {
+                            // Afficher le panneau Profil
+                            StackPane stackPane = new StackPane();
+                            stackPane.getChildren().addAll(root.getCenter(), profilPanel);
+                            StackPane.setAlignment(profilPanel, Pos.CENTER);
+                            root.setPrefSize(profilPanel.getPrefWidth(), profilPanel.getPrefHeight());
+                            root.setCenter(stackPane);
+//                    root.setCenter(profilPanel);
+                            profilPanel.toFront();
+                            profilPanel.showMaxSize();
+
+                        } else {
+                            // Cacher le panneau Profil
+                            profilPanel.hide();
+                        }
+                        isProfilOpen = !isProfilOpen;
+
+                    }
+                });
+
             } else {
                 System.out.println("non");
+                root.getChildren().remove(menu);
+                headerButtons.getChildren().clear();
+                headerButtons.getChildren().addAll(menuButton, profil);
+                
+                                profil.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        if (!isProfilOpen) {
+                            // Afficher le panneau Profil
+                            StackPane stackPane = new StackPane();
+                            stackPane.getChildren().addAll(root.getCenter(), profilPanel);
+                            StackPane.setAlignment(profilPanel, Pos.CENTER);
+                            root.setPrefSize(profilPanel.getPrefWidth(), profilPanel.getPrefHeight());
+                            root.setCenter(stackPane);
+//                    root.setCenter(profilPanel);
+                            profilPanel.toFront();
+                            profilPanel.showNoMaxSize();
+
+                        } else {
+                            // Cacher le panneau Profil
+                            profilPanel.hide();
+                        }
+                        isProfilOpen = !isProfilOpen;
+
+                    }
+                });
+
             }
         });
     }

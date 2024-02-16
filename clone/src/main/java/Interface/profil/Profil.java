@@ -25,7 +25,8 @@ import javafx.util.Duration;
 public class Profil extends VBox {
 
     public Profil() {
-         Label fonction = new Label("Espace secrétaire");
+
+        Label fonction = new Label("Espace secrétaire");
         Label nomText = new Label("Nom:");
         Label nom = new Label("Di Caprio");
         Label prenomText = new Label("Prénom:");
@@ -36,7 +37,7 @@ public class Profil extends VBox {
         fonction.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         fonction.setTextFill(Color.DARKGRAY);
 
-        ImageView deconnexionIcon = new ImageView(new Image(getClass().getResourceAsStream("/interface/secretaire/images/deconnecter.png")));
+        ImageView deconnexionIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/deconnecter.png")));
         deconnexionIcon.setFitHeight(20);
         deconnexionIcon.setFitWidth(20);
         deconnexion.setGraphic(deconnexionIcon);
@@ -82,9 +83,17 @@ public class Profil extends VBox {
 
     }
 
-    public void show() {
+    public void showMaxSize() {
         TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), this);
         transition.setToX(800); // Afficher le panneau à gauche 1100
+//        transition.setToY(125);
+        transition.play();
+        System.out.println("show");
+    }
+
+    public void showNoMaxSize() {
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), this);
+        transition.setToX(1100); // Afficher le panneau à gauche 1100
 //        transition.setToY(125);
         transition.play();
         System.out.println("show");
@@ -97,4 +106,5 @@ public class Profil extends VBox {
         transition.play();
         System.out.println("hide");
     }
+
 }

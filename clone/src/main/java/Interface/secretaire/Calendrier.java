@@ -37,12 +37,12 @@ public class Calendrier extends VBox {
         Button rightButton = new Button("=>");
         Button leftButton = new Button("<=");
 
-        ImageView brouillonIcon = new ImageView(new Image(getClass().getResourceAsStream("/interface/secretaire/images/brouillon.png")));
+        ImageView brouillonIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/brouillon.png")));
         brouillonIcon.setFitHeight(20);
         brouillonIcon.setFitWidth(20);
         brouillon.setGraphic(brouillonIcon);
 
-        ImageView confirmerIcon = new ImageView(new Image(getClass().getResourceAsStream("/interface/secretaire/images/enregistrer.png")));
+        ImageView confirmerIcon = new ImageView(new Image(getClass().getResourceAsStream("/images/enregistrer.png")));
         confirmerIcon.setFitHeight(20);
         confirmerIcon.setFitWidth(20);
         confirmer.setGraphic(confirmerIcon);

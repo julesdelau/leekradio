@@ -6,6 +6,8 @@ package interfaceUser;
 
 
 import java.util.Vector;
+import javax.swing.Icon;
+
 
 /**
  *
@@ -70,12 +72,12 @@ int temp =0;
         jLabel5 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        envoyer = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         compte_Rendu = new java.awt.TextArea();
-        jLabel7 = new javax.swing.JLabel();
+        picture = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -189,10 +191,10 @@ int temp =0;
             }
         });
 
-        jButton8.setText("envoyer");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        envoyer.setText("envoyer");
+        envoyer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                envoyerActionPerformed(evt);
             }
         });
 
@@ -211,7 +213,7 @@ int temp =0;
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
-                        .addComponent(jButton8)
+                        .addComponent(envoyer)
                         .addGap(0, 52, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton3)
@@ -247,7 +249,7 @@ int temp =0;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(53, 53, 53)
-                .addComponent(jButton8)
+                .addComponent(envoyer)
                 .addGap(32, 32, 32))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -257,8 +259,6 @@ int temp =0;
         );
 
         jInternalFrame1.setVisible(true);
-
-        jLabel7.setText("jLabel7");
 
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
@@ -270,14 +270,14 @@ int temp =0;
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(224, 224, 224))
+                .addComponent(picture, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(109, 109, 109))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jLabel7)
+                .addComponent(picture, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(compte_Rendu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -360,16 +360,17 @@ int temp =0;
         //zoom avant
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void envoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envoyerActionPerformed
         // TODO add your handling code here:
         //le boutton envoyer faut creer fichier xml
+       Icon image= picture.getIcon();
         compte_Rendu.getText();// le compte rendu sous forme de string a mettre dans la base de donnée
         if(this.is_medecin){// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
         }else{
             // c'est un manipulateur , deux chois on en le laisse pas stocker dans la base de donnée ou alors on stoke dans la base avec un flag pas complet
         }
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_envoyerActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -401,7 +402,7 @@ int temp =0;
     private void listeradioafaireValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeradioafaireValueChanged
         // TODO add your handling code here:
      int select = listeradioafaire.getSelectedIndex();
-      jLabel7.setText(listepatientatraiter.elementAt(select));
+      picture.setText(listepatientatraiter.elementAt(select));
         
         
            
@@ -417,7 +418,7 @@ int temp =0;
         // TODO add your handling code here:
        int select = listRadioATraiter.getSelectedIndex();
         
-      jLabel7.setText(listepatientatraiter.elementAt(select));
+      picture.setText(listepatientatraiter.elementAt(select));
     }//GEN-LAST:event_listRadioATraiterValueChanged
 
     /**
@@ -427,6 +428,7 @@ int temp =0;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.TextArea compte_Rendu;
+    private javax.swing.JButton envoyer;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -434,7 +436,6 @@ int temp =0;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -442,7 +443,6 @@ int temp =0;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -450,5 +450,6 @@ int temp =0;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> listRadioATraiter;
     private javax.swing.JList<String> listeradioafaire;
+    private javax.swing.JLabel picture;
     // End of variables declaration//GEN-END:variables
 }

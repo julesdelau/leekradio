@@ -19,6 +19,7 @@ private String name;
 private Vector<String> listepatientatraiter;// un test on utilisera des array plutot
 private Vector<String> listepatienttraite;
 int temp =0;
+Sql_handler s = new Sql_handler();
     /**
      * Creates new form hub_medecin_et_observateur
      */
@@ -31,7 +32,7 @@ int temp =0;
         // a changer le chiffre ds l'initialisation
         listepatientatraiter= new Vector(10);
         listepatienttraite= new Vector(10);
-        
+        s.listpatient(true);
         
         this.is_medecin=is_medecin;
         //t'st de liste , a faire avec bdd pour choper liste pateirn a traité et celle traité

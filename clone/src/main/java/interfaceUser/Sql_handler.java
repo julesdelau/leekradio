@@ -6,6 +6,7 @@ package interfaceUser;
 
 import java.sql.*;
 
+
 /**
  *
  * @author Jules_D
@@ -71,20 +72,83 @@ public class Sql_handler {
 
         return retour;
     }
+    public String createdate(int year ,int month , int day){
+        if(day>31||month>12){
+            return "01/01/0000";
+            
+        }
+        String sortie =""+day+"/"+month+"/"+year;
+        return sortie;
+    }
+    public void listpatient(boolean istreated){
+        
+        String sql = "SELECT * FROM DMRTEST ";
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            rs.getMetaData().toString();
+            System.out.println(rs.getMetaData().toString());
+            
+           
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("suis la");
 
-    public boolean addDmr(String iddmr, String fichierXml) {
-        try{
-            String sql = "INSERT into dmr VALUE( '" +iddmr+"' , '" +fichierXml +"')";
-           st = connection.createStatement();
-           rs = st.executeQuery(sql);
+        }
+    }
+
+    public boolean addDmr(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu) {
+        try {
+            String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , '" + date + "' , '" + adresse + "' , '" + photo + "' , '" + compterendu + "')";
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
             return true;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
+        }
+    }
+
+    public void CreateTable() {
+        String sql = "CREATE TABLE DMRTEST "
+                + "(IDMR integer NOT NULL, "
+                + " NAME varchar(20) NOT NULL, "
+                + " FIRSTNAME varchar(20) NOT NULL, "
+                + " BIRTHDATE DATE , "
+                + " ADRESSE varchar(120) NOT NULL, "
+                + " IDPHOTO varchar(50) , "
+                + "COMPTE_RENDU varchar(2000) , "
+                + " PRIMARY KEY (IDMR))";
+
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("fait");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+
+        }
+    }
+
+    public void drop(String table) {
+        String sql = "DROP TABLE " + table ;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("fait");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+
         }
     }
 }
 // table identite(id,mdp,specialite,nom , prenom)id des medic secret et manip
 
 //table finder(iddmr , nom ,prenom, adresse, datenaissnce)
-// soi dmr(iddmr , fichierxml)
+// soi dmr(iddmr , nom , prenom , datenaissance ,adfesse,urlverpacs ,compte randu)
+// table pacs -> idphoto , photo format icon
+//https://netpbm.sourceforge.net pour pgm

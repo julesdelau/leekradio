@@ -5,7 +5,7 @@
 package interfaceUser;
 
 import java.sql.*;
-
+import java.util.Vector;
 
 /**
  *
@@ -63,6 +63,7 @@ public class Sql_handler {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             rs.next();
+
             retour = rs.getInt(1);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -72,34 +73,51 @@ public class Sql_handler {
 
         return retour;
     }
-    public String createdate(int year ,int month , int day){
-        if(day>31||month>12){
+
+    public String createdate(int year, int month, int day) {
+        if (day > 31 || month > 12) {
             return "01/01/0000";
-            
+
         }
-        String sortie =""+day+"/"+month+"/"+year;
+        String sortie = "" + day + "/" + month + "/" + year;
         return sortie;
     }
-    public void listpatient(boolean istreated){
-        
+
+    public Vector<String> listpatient(boolean istreated) {
+        int traitement;
+        Vector<String> sortie = new Vector<String>();
         String sql = "SELECT * FROM DMRTEST ";
         try {
+            if (istreated) {
+                traitement = 1;
+            } else {
+                traitement = 0;
+            }
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            rs.getMetaData().toString();
-            System.out.println(rs.getMetaData().toString());
-            
-           
+            rs.next();
+            for (int i = 0; i < rs.getRow(); i++) {
+                if (rs.getInt(rs.getMetaData().getColumnLabel(rs.getMetaData().getColumnCount())) == traitement) {
+                    for (int j = 1; j < rs.getMetaData().getColumnCount(); j++) {// on cemmence ne 1 et fini en nb colonnes +1
+                        
+                        sortie.add(rs.getString(rs.getMetaData().getColumnLabel(j)));
+                    }
+                }
+                rs.next();
+            }
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.out.println("suis la");
 
         }
+        // System.out.println(sortie);
+        return sortie;
     }
 
-    public boolean addDmr(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu) {
+    public boolean addDmr(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu, int dejatraite) {
         try {
-            String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , '" + date + "' , '" + adresse + "' , '" + photo + "' , '" + compterendu + "')";
+            String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , '" + date + "' , '" + adresse + "' , '" + photo + "' , '" + compterendu + "' , '" + dejatraite + "')";
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             return true;
@@ -118,6 +136,7 @@ public class Sql_handler {
                 + " ADRESSE varchar(120) NOT NULL, "
                 + " IDPHOTO varchar(50) , "
                 + "COMPTE_RENDU varchar(2000) , "
+                + " DEJATRAITE integer NOT NULL, "
                 + " PRIMARY KEY (IDMR))";
 
         try {
@@ -133,7 +152,7 @@ public class Sql_handler {
     }
 
     public void drop(String table) {
-        String sql = "DROP TABLE " + table ;
+        String sql = "DROP TABLE " + table;
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
@@ -151,4 +170,5 @@ public class Sql_handler {
 //table finder(iddmr , nom ,prenom, adresse, datenaissnce)
 // soi dmr(iddmr , nom , prenom , datenaissance ,adfesse,urlverpacs ,compte randu)
 // table pacs -> idphoto , photo format icon
-//https://netpbm.sourceforge.net pour pgm
+//crrer la methode quit
+// copier le constru pr crrer methode connect et ajouter connet et quit das chaque methoide

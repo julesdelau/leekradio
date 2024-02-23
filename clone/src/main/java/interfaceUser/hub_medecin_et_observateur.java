@@ -4,45 +4,60 @@
  */
 package interfaceUser;
 
-
 import java.util.Vector;
 import javax.swing.Icon;
-
 
 /**
  *
  * @author Jules_D
  */
 public class hub_medecin_et_observateur extends javax.swing.JFrame {
-private boolean is_medecin;
-private String name;
-private Vector<String> listepatientatraiter;// un test on utilisera des array plutot
-private Vector<String> listepatienttraite;
-int temp =0;
-Sql_handler s = new Sql_handler();
+
+    private boolean is_medecin;
+    private String name;
+    private Vector<String> affichageATraiter;// un test on utilisera des array plutot
+    private Vector<String> affichageDejaTraiter;
+    private Vector<String> donnePatientATraiter;
+    private Vector<String> donnePatientDejaTraiter;
+    private int nbComposantes = 7;
+    
+    Sql_handler s = new Sql_handler();
+
     /**
      * Creates new form hub_medecin_et_observateur
      */
-    public hub_medecin_et_observateur(boolean is_medecin,String name) {
+    public hub_medecin_et_observateur(boolean is_medecin, String name) {
         initComponents();
         jLabel1.setText(name);
-        this.name=name;
-        
-        
+        this.name = name;
+
         // a changer le chiffre ds l'initialisation
-        listepatientatraiter= new Vector(10);
-        listepatienttraite= new Vector(10);
-        s.listpatient(true);
+        affichageATraiter = new Vector(10);
+        affichageDejaTraiter = new Vector(10);
+        donnePatientATraiter = s.listpatient(false);
+        donnePatientDejaTraiter =s.listpatient(true);
         
-        this.is_medecin=is_medecin;
-        //t'st de liste , a faire avec bdd pour choper liste pateirn a traité et celle traité
-       for(int i =0 ; i<10 ; i++){
-           String item = "baa"+i;
-           listepatientatraiter.addElement(item);// bon mais il faut mettre la requete ici
-       }
-       
-        listeradioafaire.setListData(listepatientatraiter);
-       // listRadioATraiter.setListData(listepatienttraite);
+        
+        // remplir les données des patients a traiter
+        int i = 0;
+        while (i < donnePatientDejaTraiter.size()) {
+            affichageDejaTraiter.add(donnePatientDejaTraiter.get(i + 1) + " " + donnePatientDejaTraiter.get(i + 2));
+            i += nbComposantes;
+        }
+        // remplir les données des patient deja traités
+         i = 0;
+        while (i < donnePatientATraiter.size()) {
+            affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
+            i += nbComposantes;
+        }
+        
+        
+        
+        
+        
+        //
+        listeATraiter.setListData(affichageATraiter);
+        listeDejaTraiter.setListData(affichageDejaTraiter);
         // utilisr is medecin pour octroyer les droit de faire un enregistrement dur
     }
 
@@ -56,13 +71,13 @@ Sql_handler s = new Sql_handler();
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        listeradioafaire = new javax.swing.JList<>();
+        listeATraiter = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        listRadioATraiter = new javax.swing.JList<>();
+        listeDejaTraiter = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -82,18 +97,18 @@ Sql_handler s = new Sql_handler();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        listeradioafaire.setModel(new javax.swing.AbstractListModel<String>() {
+        listeATraiter.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        listeradioafaire.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listeradioafaire.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        listeATraiter.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listeATraiter.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listeradioafaireValueChanged(evt);
+                listeATraiterValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(listeradioafaire);
+        jScrollPane1.setViewportView(listeATraiter);
 
         jLabel1.setText("jLabel1");
 
@@ -131,18 +146,18 @@ Sql_handler s = new Sql_handler();
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        listRadioATraiter.setModel(new javax.swing.AbstractListModel<String>() {
+        listeDejaTraiter.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        listRadioATraiter.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listRadioATraiter.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        listeDejaTraiter.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listeDejaTraiter.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listRadioATraiterValueChanged(evt);
+                listeDejaTraiterValueChanged(evt);
             }
         });
-        jScrollPane2.setViewportView(listRadioATraiter);
+        jScrollPane2.setViewportView(listeDejaTraiter);
 
         jLabel3.setText("à traiter");
 
@@ -364,11 +379,11 @@ Sql_handler s = new Sql_handler();
     private void envoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envoyerActionPerformed
         // TODO add your handling code here:
         //le boutton envoyer faut creer fichier xml
-       Icon image= picture.getIcon();
+        Icon image = picture.getIcon();
         compte_Rendu.getText();// le compte rendu sous forme de string a mettre dans la base de donnée
-        if(this.is_medecin){// on check le niveea ud'autorisation
+        if (this.is_medecin) {// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
-        }else{
+        } else {
             // c'est un manipulateur , deux chois on en le laisse pas stocker dans la base de donnée ou alors on stoke dans la base avec un flag pas complet
         }
     }//GEN-LAST:event_envoyerActionPerformed
@@ -381,7 +396,7 @@ Sql_handler s = new Sql_handler();
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         //le boutton numeriser radio
-        new medecin_observateur_numerisation(this.is_medecin,this.name,listepatientatraiter,listepatienttraite).setVisible(true);
+        new medecin_observateur_numerisation(this.is_medecin, this.name, affichageATraiter, affichageDejaTraiter).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -400,32 +415,25 @@ Sql_handler s = new Sql_handler();
         //zoom arriere
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void listeradioafaireValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeradioafaireValueChanged
+    private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
-     int select = listeradioafaire.getSelectedIndex();
-      picture.setText(listepatientatraiter.elementAt(select));
-        
-        
-           
-        
-        
-       
-       
+        int select = listeATraiter.getSelectedIndex();
+        picture.setText(affichageATraiter.elementAt(select));
+
         // choper l'element
         // l'illuminer et le faire passer sur la jframe
-    }//GEN-LAST:event_listeradioafaireValueChanged
+    }//GEN-LAST:event_listeATraiterValueChanged
 
-    private void listRadioATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listRadioATraiterValueChanged
+    private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
-       int select = listRadioATraiter.getSelectedIndex();
-        
-      picture.setText(listepatientatraiter.elementAt(select));
-    }//GEN-LAST:event_listRadioATraiterValueChanged
+        int select = listeDejaTraiter.getSelectedIndex();
+
+        picture.setText(affichageDejaTraiter.elementAt(select));
+    }//GEN-LAST:event_listeDejaTraiterValueChanged
 
     /**
      * @param args the command line arguments
      */
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.TextArea compte_Rendu;
@@ -449,8 +457,8 @@ Sql_handler s = new Sql_handler();
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList<String> listRadioATraiter;
-    private javax.swing.JList<String> listeradioafaire;
+    private javax.swing.JList<String> listeATraiter;
+    private javax.swing.JList<String> listeDejaTraiter;
     private javax.swing.JLabel picture;
     // End of variables declaration//GEN-END:variables
 }

@@ -37,7 +37,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         donnePatientATraiter = s.listpatient(false);
         donnePatientDejaTraiter =s.listpatient(true);
         
-        
+        System.out.println( donnePatientATraiter);
         // remplir les données des patients a traiter
         int i = 0;
         while (i < donnePatientDejaTraiter.size()) {
@@ -92,7 +92,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jInternalFrame1 = new javax.swing.JInternalFrame();
-        compte_Rendu = new java.awt.TextArea();
+        compteRendu = new java.awt.TextArea();
         picture = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -282,7 +282,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(compte_Rendu, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+                .addComponent(compteRendu, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -295,7 +295,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(picture, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(compte_Rendu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(compteRendu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -380,7 +380,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         // TODO add your handling code here:
         //le boutton envoyer faut creer fichier xml
         Icon image = picture.getIcon();
-        compte_Rendu.getText();// le compte rendu sous forme de string a mettre dans la base de donnée
+        compteRendu.getText();// le compte rendu sous forme de string a mettre dans la base de donnée
         if (this.is_medecin) {// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
         } else {
@@ -418,7 +418,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
-        picture.setText(affichageATraiter.elementAt(select));
+        picture.setText(donnePatientATraiter.elementAt(select*nbComposantes+5));
+        compteRendu.setText(donnePatientATraiter.elementAt(select*nbComposantes+6));
 
         // choper l'element
         // l'illuminer et le faire passer sur la jframe
@@ -428,7 +429,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         // TODO add your handling code here:
         int select = listeDejaTraiter.getSelectedIndex();
 
-        picture.setText(affichageDejaTraiter.elementAt(select));
+        picture.setText(donnePatientDejaTraiter.elementAt(select*nbComposantes+5));
+        compteRendu.setText(donnePatientDejaTraiter.elementAt(select*nbComposantes+6));
     }//GEN-LAST:event_listeDejaTraiterValueChanged
 
     /**
@@ -436,7 +438,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.TextArea compte_Rendu;
+    private java.awt.TextArea compteRendu;
     private javax.swing.JButton envoyer;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

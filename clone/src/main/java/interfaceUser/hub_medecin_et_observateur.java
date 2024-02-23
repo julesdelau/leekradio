@@ -14,12 +14,12 @@ import javax.swing.Icon;
 public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
     private boolean is_medecin;
-    private String name;
+    private final String name;
     private Vector<String> affichageATraiter;// un test on utilisera des array plutot
     private Vector<String> affichageDejaTraiter;
     private Vector<String> donnePatientATraiter;
     private Vector<String> donnePatientDejaTraiter;
-    private int nbComposantes = 7;
+    private final int nbComposantes = 7;
     
     Sql_handler s = new Sql_handler();
 
@@ -37,7 +37,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         donnePatientATraiter = s.listpatient(false);
         donnePatientDejaTraiter =s.listpatient(true);
         
-        System.out.println( donnePatientATraiter);
+      
         // remplir les données des patients a traiter
         int i = 0;
         while (i < donnePatientDejaTraiter.size()) {

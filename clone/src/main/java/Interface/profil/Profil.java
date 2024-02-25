@@ -5,21 +5,16 @@
  */
 package Interface.profil;
 
-import Interface.secretaire.SecretaireFX;
-
 import static javafx.application.Application.launch;
-import java.util.*;
+
 import javafx.animation.TranslateTransition;
 import javafx.event.*;
-import javafx.application.Application;
 import javafx.geometry.*;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.text.*;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Profil extends VBox {
@@ -74,7 +69,7 @@ public class Profil extends VBox {
 //        content.setAlignment(Pos.CENTER);
         content.getChildren().addAll(fonction, information); // Ajoutez les éléments au conteneur
 
-        content.setPrefSize(700, 600);
+//        content.setPrefSize(700, 600);
         // Ajoutez le conteneur au panneau Profil
         this.getChildren().add(content);
 
@@ -83,21 +78,15 @@ public class Profil extends VBox {
 
     }
 
-    public void showMaxSize() {
+    public void show() {
         TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), this);
-        transition.setToX(800); // Afficher le panneau à gauche 1100
+        transition.setToX(1300); // Afficher le panneau à gauche 1100
 //        transition.setToY(125);
         transition.play();
         System.out.println("show");
     }
 
-    public void showNoMaxSize() {
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), this);
-        transition.setToX(1100); // Afficher le panneau à gauche 1100
-//        transition.setToY(125);
-        transition.play();
-        System.out.println("show");
-    }
+
 
     // Méthode pour cacher le panneau Profil en le faisant glisser
     public void hide() {

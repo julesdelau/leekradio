@@ -10,7 +10,6 @@ import Interface.profil.Profil;
 import java.util.*;
 
 import interfaceUser.Sql_handler;
-import javafx.animation.TranslateTransition;
 import javafx.event.*;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -22,16 +21,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import javafx.scene.input.*;
 
-public class SecretaireFX extends Application {
+public class Secretaire extends Application {
 
     Sql_handler moteur;
     AnchorPane header = new AnchorPane();
     private boolean isProfilOpen = false;
 
-    public SecretaireFX() {
+    public Secretaire() {
         moteur = new Sql_handler();
     }
 

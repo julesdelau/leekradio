@@ -6,11 +6,9 @@
 package Interface.secretaire;
 
 import Interface.secretaire.programme.Recap;
-import Interface.secretaire.programme.inscriptionPatient;
+import Interface.secretaire.programme.InscriptionPatient;
 import Interface.secretaire.programme.Autres;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -22,10 +20,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -131,7 +127,7 @@ public class Programme extends VBox {
             @Override
             public void handle(ActionEvent event) {
                 autrePanel.getChildren().clear();
-                inscriptionPatient nouveauPanel = new inscriptionPatient();
+                InscriptionPatient nouveauPanel = new InscriptionPatient();
                 autrePanel.getChildren().addAll(nouveauPanel);
 
             }

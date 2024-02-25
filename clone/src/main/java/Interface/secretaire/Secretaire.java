@@ -8,6 +8,8 @@ package Interface.secretaire;
 import Interface.profil.Profil;
 
 import java.util.*;
+
+import interfaceUser.Sql_handler;
 import javafx.animation.TranslateTransition;
 import javafx.event.*;
 import javafx.application.Application;
@@ -25,17 +27,22 @@ import javafx.scene.input.*;
 
 public class SecretaireFX extends Application {
 
+    Sql_handler moteur;
     AnchorPane header = new AnchorPane();
     private boolean isProfilOpen = false;
+
+    public SecretaireFX() {
+        moteur = new Sql_handler();
+    }
 
     @Override
     public void start(Stage primaryStage) {
         // Création des composants
         Label bonjour = new Label("Bienvenue dans votre espace!");
         Button programme = new Button("Programmer Rendez-vous");
-        Button calendrier = new Button("Consulter Calendrier");
-        Button requetes = new Button("Consulter Requetes");
-        Button liste = new Button("Liste des Rendez-vous");
+        Button calendar = new Button("Consulter Calendrier");
+        Button request = new Button("Consulter Requetes");
+        Button list = new Button("Liste des Rendez-vous");
         Button profil = new Button("Profil");
         Button menuButton = new Button("Menu");
 //        Button deconnexion = new Button("Déconnexion");
@@ -74,9 +81,9 @@ public class SecretaireFX extends Application {
 //        logoPanel.getChildren().addAll(logo);
         // Uniformiser la taille des boutons
         programme.setPrefSize(180, 50);
-        calendrier.setPrefSize(180, 50);
-        requetes.setPrefSize(180, 50);
-        liste.setPrefSize(180, 50);
+        calendar.setPrefSize(180, 50);
+        request.setPrefSize(180, 50);
+        list.setPrefSize(180, 50);
 
         // Création des panneaux
         VBox menu = new VBox(50);
@@ -119,7 +126,7 @@ public class SecretaireFX extends Application {
         panelVide.getChildren().add(bonjour);
 
         // Ajout des boutons au menu
-        menu.getChildren().addAll(programme, calendrier, requetes, liste);
+        menu.getChildren().addAll(programme, calendar, request, list);
 
         // Création du conteneur principal BorderPane
         BorderPane root = new BorderPane();
@@ -136,7 +143,7 @@ public class SecretaireFX extends Application {
         BorderPane.setMargin(panelVide, new Insets(10));
 
         Profil profilPanel = new Profil();
-        profilPanel.showMaxSize();
+
 //                VBox content = new VBox();
 //        content.getChildren().addAll(root, profilPanel);
 //
@@ -194,9 +201,9 @@ public class SecretaireFX extends Application {
                 List<Button> boutons = new ArrayList<>();
 
                 boutons.add(programme);
-                boutons.add(calendrier);
-                boutons.add(requetes);
-                boutons.add(liste);
+                boutons.add(calendar);
+                boutons.add(request);
+                boutons.add(list);
 
                 // Configuration de l'événement de clic pour chaque bouton
                 for (Button bouton : boutons) {
@@ -213,7 +220,7 @@ public class SecretaireFX extends Application {
         });
 
         // Action à effectuer lors du clic sur le bouton "Calendrier"
-        calendrier.setOnAction(new EventHandler<ActionEvent>() {
+        calendar.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 // Mettez ici le code à exécuter lorsque le bouton "Profil" est cliqué
@@ -232,9 +239,9 @@ public class SecretaireFX extends Application {
                 List<Button> boutons = new ArrayList<>();
 
                 boutons.add(programme);
-                boutons.add(calendrier);
-                boutons.add(requetes);
-                boutons.add(liste);
+                boutons.add(calendar);
+                boutons.add(request);
+                boutons.add(list);
 
                 // Configuration de l'événement de clic pour chaque bouton
                 for (Button bouton : boutons) {
@@ -245,12 +252,12 @@ public class SecretaireFX extends Application {
                     // Change le style du bouton cliqué
 
                 }
-                calendrier.setStyle("-fx-background-color: #336699; -fx-text-fill: white;");
+                calendar.setStyle("-fx-background-color: #336699; -fx-text-fill: white;");
             }
         });
 
         // Action à effectuer lors du clic sur le bouton "Requetes"
-        requetes.setOnAction(new EventHandler<ActionEvent>() {
+        request.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 // Mettez ici le code à exécuter lorsque le bouton "Profil" est cliqué
@@ -269,9 +276,9 @@ public class SecretaireFX extends Application {
                 List<Button> boutons = new ArrayList<>();
 
                 boutons.add(programme);
-                boutons.add(calendrier);
-                boutons.add(requetes);
-                boutons.add(liste);
+                boutons.add(calendar);
+                boutons.add(request);
+                boutons.add(list);
 
                 // Configuration de l'événement de clic pour chaque bouton
                 for (Button bouton : boutons) {
@@ -282,13 +289,13 @@ public class SecretaireFX extends Application {
                     // Change le style du bouton cliqué
 
                 }
-                requetes.setStyle("-fx-background-color: #336699; -fx-text-fill: white;");
+                request.setStyle("-fx-background-color: #336699; -fx-text-fill: white;");
 
             }
         });
 
         // Action à effectuer lors du clic sur le bouton "Liste"
-        liste.setOnAction(new EventHandler<ActionEvent>() {
+        list.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 // Mettez ici le code à exécuter lorsque le bouton "Profil" est cliqué
@@ -307,9 +314,9 @@ public class SecretaireFX extends Application {
                 List<Button> boutons = new ArrayList<>();
 
                 boutons.add(programme);
-                boutons.add(calendrier);
-                boutons.add(requetes);
-                boutons.add(liste);
+                boutons.add(calendar);
+                boutons.add(request);
+                boutons.add(list);
 
                 // Configuration de l'événement de clic pour chaque bouton
                 for (Button bouton : boutons) {
@@ -320,7 +327,33 @@ public class SecretaireFX extends Application {
                     // Change le style du bouton cliqué
 
                 }
-                liste.setStyle("-fx-background-color: #336699; -fx-text-fill: white;");
+                list.setStyle("-fx-background-color: #336699; -fx-text-fill: white;");
+
+            }
+        });
+
+        profil.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if (!isProfilOpen) {
+                    // Afficher le panneau Profil
+                    StackPane stackPane = new StackPane();
+                    stackPane.getChildren().addAll(root.getCenter(), profilPanel);
+                    StackPane.setAlignment(profilPanel, Pos.CENTER);
+                    //root.setPrefSize(profilPanel.getPrefWidth(), profilPanel.getPrefHeight());
+                    root.setCenter(stackPane);
+//                    root.setCenter(profilPanel);
+                    profilPanel.toFront();
+                    profilPanel.show();
+
+
+                } else {
+                    // Cacher le panneau Profil
+                    profilPanel.hide();
+                }
+                isProfilOpen = !isProfilOpen;
+
 
             }
         });
@@ -334,67 +367,7 @@ public class SecretaireFX extends Application {
         primaryStage.setMaximized(true);
         primaryStage.show();
 
-        primaryStage.maximizedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                System.out.println("oui");
-                root.getChildren().add(menu);
 
-                profil.setOnAction(new EventHandler<ActionEvent>() {
-
-                    @Override
-                    public void handle(ActionEvent event) {
-                        if (!isProfilOpen) {
-                            // Afficher le panneau Profil
-                            StackPane stackPane = new StackPane();
-                            stackPane.getChildren().addAll(root.getCenter(), profilPanel);
-                            StackPane.setAlignment(profilPanel, Pos.CENTER);
-                            root.setPrefSize(profilPanel.getPrefWidth(), profilPanel.getPrefHeight());
-                            root.setCenter(stackPane);
-//                    root.setCenter(profilPanel);
-                            profilPanel.toFront();
-                            profilPanel.showMaxSize();
-
-                        } else {
-                            // Cacher le panneau Profil
-                            profilPanel.hide();
-                        }
-                        isProfilOpen = !isProfilOpen;
-
-                    }
-                });
-
-            } else {
-                System.out.println("non");
-                root.getChildren().remove(menu);
-                headerButtons.getChildren().clear();
-                headerButtons.getChildren().addAll(menuButton, profil);
-                
-                                profil.setOnAction(new EventHandler<ActionEvent>() {
-
-                    @Override
-                    public void handle(ActionEvent event) {
-                        if (!isProfilOpen) {
-                            // Afficher le panneau Profil
-                            StackPane stackPane = new StackPane();
-                            stackPane.getChildren().addAll(root.getCenter(), profilPanel);
-                            StackPane.setAlignment(profilPanel, Pos.CENTER);
-                            root.setPrefSize(profilPanel.getPrefWidth(), profilPanel.getPrefHeight());
-                            root.setCenter(stackPane);
-//                    root.setCenter(profilPanel);
-                            profilPanel.toFront();
-                            profilPanel.showNoMaxSize();
-
-                        } else {
-                            // Cacher le panneau Profil
-                            profilPanel.hide();
-                        }
-                        isProfilOpen = !isProfilOpen;
-
-                    }
-                });
-
-            }
-        });
     }
 
     public static void main(String[] args) {

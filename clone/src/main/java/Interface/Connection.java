@@ -1,19 +1,11 @@
 package Interface;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import interfaceUser.ConnectionFrame;
 import interfaceUser.Sql_handler;
 import interfaceUser.encrypteur;
 import interfaceUser.hub_medecin_et_observateur;
 import javafx.event.*;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,14 +16,12 @@ import javafx.scene.paint.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 public class Connection extends Application {
 
     Sql_handler moteur;
     AnchorPane header = new AnchorPane();
-    private boolean isProfilOpen = false;
+
 
     public Connection(){
         moteur = new Sql_handler();
@@ -40,8 +30,10 @@ public class Connection extends Application {
     public void start(Stage primaryStage){
         Label titre = new Label("Connectez-vous");
         Label text = new Label("Saisissez vos identifiants et mot de passe pour vous connecter");
+
         TextField nomUtilisateurField = new TextField();
         PasswordField motDePasseField = new PasswordField();
+
         Button connectionButton = new Button("Connection");
 
         nomUtilisateurField.setPromptText("Nom d'utilisateur");

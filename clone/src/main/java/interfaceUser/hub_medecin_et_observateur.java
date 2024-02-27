@@ -20,8 +20,9 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private Vector<String> donnePatientATraiter;
     private Vector<String> donnePatientDejaTraiter;
     private final int nbComposantes = 7;
-    String idDmrCourante ;
-   
+    private int dossierSelectionne=-1;
+    private String idDmrCourante;
+
     Sql_handler s = new Sql_handler();
 
     /**
@@ -31,14 +32,13 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         initComponents();
         jLabel1.setText(name);
         this.name = name;
-
+        this.is_medecin = is_medecin;
         // a changer le chiffre ds l'initialisation
         affichageATraiter = new Vector(10);
         affichageDejaTraiter = new Vector(10);
         donnePatientATraiter = s.listpatient(false);
-        donnePatientDejaTraiter =s.listpatient(true);
-        
-      
+        donnePatientDejaTraiter = s.listpatient(true);
+
         // remplir les données des patients a traiter
         int i = 0;
         while (i < donnePatientDejaTraiter.size()) {
@@ -46,16 +46,12 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
             i += nbComposantes;
         }
         // remplir les données des patient deja traités
-         i = 0;
+        i = 0;
         while (i < donnePatientATraiter.size()) {
             affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
             i += nbComposantes;
         }
-        
-        
-        
-        
-        
+
         //
         listeATraiter.setListData(affichageATraiter);
         listeDejaTraiter.setListData(affichageDejaTraiter);
@@ -378,20 +374,29 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void envoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envoyerActionPerformed
-        // TODO add your handling code here:
+        // ajouter utiliser le flag
         //le boutton envoyer faut creer fichier xml
         Icon image = picture.getIcon();
-     
+
+        
+        
+        
         if (this.is_medecin) {// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
-            if("dejatraite".equals(idDmrCourante)){
+            if (idDmrCourante.contains("dejatraite")) {
                 // patient deja traité donc on ne fait rien
-            }else{
+                System.out.println("le dossier est deja complet");
+            } else {
                 // faut absolument un iddmr en clés simple
-               s.SubmitCR(compteRendu.getText(), idDmrCourante); 
+                System.out.println("completont le dossier");
+                s.SubmitCR(compteRendu.getText(), idDmrCourante);
+                donnePatientATraiter.set(dossierSelectionne * nbComposantes + 6, compteRendu.getText());
+
+                System.out.println("le changement a été fait");
             }
-            
+
         } else {
+            System.out.println("vous etes un manipulateur , pour l'instant pas le droit a la modif");
             // c'est un manipulateur , deux chois on en le laisse pas stocker dans la base de donnée ou alors on stoke dans la base avec un flag pas complet
         }
     }//GEN-LAST:event_envoyerActionPerformed
@@ -426,22 +431,21 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
-        picture.setText(donnePatientATraiter.elementAt(select*nbComposantes+5));
-        compteRendu.setText(donnePatientATraiter.elementAt(select*nbComposantes+6));
-        idDmrCourante=donnePatientATraiter.elementAt(select*nbComposantes);
-        
-        // choper l'element
-        // l'illuminer et le faire passer sur la jframe
+        picture.setText(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+        compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
+        idDmrCourante = donnePatientATraiter.elementAt(select * nbComposantes);
+        dossierSelectionne = select;
+    
     }//GEN-LAST:event_listeATraiterValueChanged
 
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
         int select = listeDejaTraiter.getSelectedIndex();
+        picture.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 5));
+        compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
+        idDmrCourante = "dejatraite";
 
-        picture.setText(donnePatientDejaTraiter.elementAt(select*nbComposantes+5));
-        compteRendu.setText(donnePatientDejaTraiter.elementAt(select*nbComposantes+6));
-        idDmrCourante= "dejatraite";
-        
+
     }//GEN-LAST:event_listeDejaTraiterValueChanged
 
     /**

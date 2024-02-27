@@ -99,7 +99,7 @@ public class Sql_handler {
             for (int i = 0; i < rs.getRow(); i++) {
                 if (rs.getInt(rs.getMetaData().getColumnLabel(rs.getMetaData().getColumnCount())) == traitement) {
                     for (int j = 1; j < rs.getMetaData().getColumnCount(); j++) {// on cemmence ne 1 et fini en nb colonnes +1
-                        
+
                         sortie.add(rs.getString(rs.getMetaData().getColumnLabel(j)));
                     }
                 }
@@ -127,6 +127,27 @@ public class Sql_handler {
         }
     }
 
+    public boolean SubmitCR(String CR , String IDMR){
+        String sql="UPDATE DMRTEST "
+            +"SET COMPTE_RENDU ='"+ CR +"' "
+            +"WHERE IDMR ='" + IDMR +"' ";
+           
+         try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("fait");
+             return true;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+            return false;
+
+        }            
+        
+       
+    }
+    
     public void CreateTable() {
         String sql = "CREATE TABLE DMRTEST "
                 + "(IDMR integer NOT NULL, "

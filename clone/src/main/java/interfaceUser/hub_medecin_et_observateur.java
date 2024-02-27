@@ -20,7 +20,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private Vector<String> donnePatientATraiter;
     private Vector<String> donnePatientDejaTraiter;
     private final int nbComposantes = 7;
-    
+    String idDmrCourante ;
+   
     Sql_handler s = new Sql_handler();
 
     /**
@@ -380,9 +381,16 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         // TODO add your handling code here:
         //le boutton envoyer faut creer fichier xml
         Icon image = picture.getIcon();
-        compteRendu.getText();// le compte rendu sous forme de string a mettre dans la base de donnée
+     
         if (this.is_medecin) {// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
+            if("dejatraite".equals(idDmrCourante)){
+                // patient deja traité donc on ne fait rien
+            }else{
+                // faut absolument un iddmr en clés simple
+               s.SubmitCR(compteRendu.getText(), idDmrCourante); 
+            }
+            
         } else {
             // c'est un manipulateur , deux chois on en le laisse pas stocker dans la base de donnée ou alors on stoke dans la base avec un flag pas complet
         }
@@ -420,7 +428,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         int select = listeATraiter.getSelectedIndex();
         picture.setText(donnePatientATraiter.elementAt(select*nbComposantes+5));
         compteRendu.setText(donnePatientATraiter.elementAt(select*nbComposantes+6));
-
+        idDmrCourante=donnePatientATraiter.elementAt(select*nbComposantes);
+        
         // choper l'element
         // l'illuminer et le faire passer sur la jframe
     }//GEN-LAST:event_listeATraiterValueChanged
@@ -431,6 +440,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
         picture.setText(donnePatientDejaTraiter.elementAt(select*nbComposantes+5));
         compteRendu.setText(donnePatientDejaTraiter.elementAt(select*nbComposantes+6));
+        idDmrCourante= "dejatraite";
+        
     }//GEN-LAST:event_listeDejaTraiterValueChanged
 
     /**

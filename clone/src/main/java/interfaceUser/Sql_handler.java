@@ -127,27 +127,44 @@ public class Sql_handler {
         }
     }
 
-    public boolean SubmitCR(String CR , String IDMR){
-        String sql="UPDATE DMRTEST "
-            +"SET COMPTE_RENDU ='"+ CR +"' "
-            +"WHERE IDMR ='" + IDMR +"' ";
-           
-         try {
+    public boolean SubmitCR(String CR, String IDMR) {
+        String sql = "UPDATE DMRTEST "
+                + "SET COMPTE_RENDU ='" + CR + "' "
+                + "WHERE IDMR ='" + IDMR + "' ";
+
+        try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             System.out.println("fait");
-             return true;
+            return true;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
             return false;
 
-        }            
-        
-       
+        }
+
     }
-    
+
+    public void ChangerFlag(String IDMR) {
+        // on change l'etat du traitement du patient en deja traité ( flag = 1)
+
+        String sql = "UPDATE DMRTEST "
+                + "SET DEJATRAITE ='" + 1 + "' "
+                + "WHERE IDMR ='" + IDMR + "' ";
+
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("fait");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+        }
+    }
+
     public void CreateTable() {
         String sql = "CREATE TABLE DMRTEST "
                 + "(IDMR integer NOT NULL, "

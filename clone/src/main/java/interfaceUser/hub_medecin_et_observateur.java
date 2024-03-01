@@ -20,7 +20,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private Vector<String> donnePatientATraiter;
     private Vector<String> donnePatientDejaTraiter;
     private final int nbComposantes = 7;
-    private int dossierSelectionne=-1;
+    private int dossierSelectionne = -1;
     private String idDmrCourante;
 
     Sql_handler s = new Sql_handler();
@@ -34,11 +34,15 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         this.name = name;
         this.is_medecin = is_medecin;
         // a changer le chiffre ds l'initialisation
+         donnePatientATraiter = s.listpatient(false);
+        donnePatientDejaTraiter = s.listpatient(true);
+        AffichageListes();
+        
+    }
+    public void AffichageListes(){
+        // voir commen faire pour detruires les anciennes liste d'affichages
         affichageATraiter = new Vector(10);
         affichageDejaTraiter = new Vector(10);
-        donnePatientATraiter = s.listpatient(false);
-        donnePatientDejaTraiter = s.listpatient(true);
-
         // remplir les données des patients a traiter
         int i = 0;
         while (i < donnePatientDejaTraiter.size()) {
@@ -51,7 +55,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
             affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
             i += nbComposantes;
         }
-
+       
         //
         listeATraiter.setListData(affichageATraiter);
         listeDejaTraiter.setListData(affichageDejaTraiter);
@@ -378,9 +382,6 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         //le boutton envoyer faut creer fichier xml
         Icon image = picture.getIcon();
 
-        
-        
-        
         if (this.is_medecin) {// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
             if (idDmrCourante.contains("dejatraite")) {
@@ -390,9 +391,28 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                 // faut absolument un iddmr en clés simple
                 System.out.println("completont le dossier");
                 s.SubmitCR(compteRendu.getText(), idDmrCourante);
+                // on test puis on utilise cela qui vas faire chier pr less tests
+                s.ChangerFlag(idDmrCourante);
                 donnePatientATraiter.set(dossierSelectionne * nbComposantes + 6, compteRendu.getText());
-
+                // comme un medic l'a submit on deplace sont contenus dans l'autre liste+ on change le flag
+                for (int i = 0; i < nbComposantes; i++) {
+                    donnePatientDejaTraiter.add(donnePatientATraiter.get(dossierSelectionne * nbComposantes));
+                    donnePatientATraiter.remove(dossierSelectionne * nbComposantes);
+                }
+                
+              
                 System.out.println("le changement a été fait");
+                System.out.println(donnePatientATraiter);
+                // refaire l'affichage des listes il y a un pb la pour les liste des patient deja traité pourtaint liste aff est bon le pb vient du valuechanged de la liste patient a traiter qui ne rtrouve plus la valeur
+                //
+                //TROUVER COMMENT RESTER LE PUTAIN DE SELECTIONEVENTLISTENER DE CE MORT  CELUI DES PATIENT A TRAITER
+                //
+                //
+
+
+//AffichageListes();
+                
+               
             }
 
         } else {
@@ -435,7 +455,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
         idDmrCourante = donnePatientATraiter.elementAt(select * nbComposantes);
         dossierSelectionne = select;
-    
+
     }//GEN-LAST:event_listeATraiterValueChanged
 
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged

@@ -1,20 +1,18 @@
-package Interface.secretaire.requetes;
+package Interface.secretaire.liste;
 
-import javafx.scene.layout.VBox;
-
+import Interface.secretaire.requetes.InfoRequetes;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
-public class RequetePanel extends VBox{
-
-    public RequetePanel(InfoRequetes info) {
+public class ListePanel extends VBox{
+    public ListePanel(InfoListe info) {
         Label type = new Label(info.getType());
         Label medecin = new Label(info.getMedecin());
         Label date = new Label(info.getDate());
         Label patient = new Label(info.getPatient());
-        Label urgent = new Label();
 
 
         Button details = new Button("Détails");
@@ -26,15 +24,9 @@ public class RequetePanel extends VBox{
         buttons.setPadding(new Insets(10));
 
         VBox labels = new VBox(10);
-        labels.getChildren().addAll(urgent, type, medecin, date, patient);
+        labels.getChildren().addAll( type, medecin, date, patient);
         labels.setPadding(new Insets(10));
 
-        if(info.isUrgent()) {
-            urgent.setText("Urgent");
-            urgent.setStyle("-fx-text-fill: red;");
-        } else {
-           labels.getChildren().remove(urgent);
-        }
 
 
 
@@ -49,12 +41,11 @@ public class RequetePanel extends VBox{
         pane.getChildren().addAll(labels, buttons);
 
         this.getChildren().add(pane);
-        if (info.isUrgent()) {
-            this.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-        } else {
-            this.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
-        }
+
+        this.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
+
 
     }
+
 
 }

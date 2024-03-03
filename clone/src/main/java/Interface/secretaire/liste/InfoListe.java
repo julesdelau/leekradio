@@ -1,20 +1,18 @@
-package Interface.secretaire.requetes;
+package Interface.secretaire.liste;
 
-public class Info {
+public class InfoListe {
     private String type;
     private String medecin;
     private String date;
     private String patient;
-    private String info;
 
-    private boolean urgence;
 
-    public Info(String type, String medecin, String date, String patient, boolean urgence) {
+
+    public InfoListe(String type, String medecin, String date, String patient) {
         this.type = type;
         this.medecin = medecin;
         this.date = date;
         this.patient = patient;
-        this.urgence = urgence;
     }
 
     public String getType() {
@@ -33,7 +31,7 @@ public class Info {
         return patient;
     }
 
-    public boolean isUrgent() {
-        return urgence;
-    }
+
 }
+
+

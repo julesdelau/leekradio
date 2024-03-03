@@ -5,13 +5,12 @@
  */
 package Interface.secretaire;
 
-import Interface.secretaire.requetes.Info;
-import Interface.secretaire.requetes.Search;
+import Interface.secretaire.requetes.InfoRequetes;
+import Interface.secretaire.requetes.SearchRequetes;
 import Interface.secretaire.requetes.RequetePanel;
-import Interface.secretaire.requetes.Filtres;
-import Interface.secretaire.requetes.PanelsFiltre;
+import Interface.secretaire.requetes.FiltresRequetes;
+import Interface.secretaire.requetes.PanelsFiltreRequetes;
 
-import Interface.Test;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -23,13 +22,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.geometry.*;
 
 
-
-import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -42,7 +38,7 @@ import java.util.List;
  */
 public class Requetes extends VBox {
     VBox information = new VBox(10);
-    List<Info> listRequetes = new ArrayList<>();
+    List<InfoRequetes> listRequetes = new ArrayList<>();
 
     public Requetes() {
         Insets insets = new Insets(10);
@@ -82,19 +78,19 @@ public class Requetes extends VBox {
 
 
 
-        listRequetes.add(new Info("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
-        listRequetes.add(new Info("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont", true));
-        listRequetes.add(new Info("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
-        listRequetes.add(new Info("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont", true));
-        listRequetes.add(new Info("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
-        listRequetes.add(new Info("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont", true));
-        listRequetes.add(new Info("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
+        listRequetes.add(new InfoRequetes("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
+        listRequetes.add(new InfoRequetes("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont", true));
+        listRequetes.add(new InfoRequetes("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
+        listRequetes.add(new InfoRequetes("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont", true));
+        listRequetes.add(new InfoRequetes("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
+        listRequetes.add(new InfoRequetes("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont", true));
+        listRequetes.add(new InfoRequetes("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont", false));
 
 
         List<RequetePanel> panneUrgent = new ArrayList<>();
 
 
-        for (Info info : listRequetes) {
+        for (InfoRequetes info : listRequetes) {
             RequetePanel requetePanel = new RequetePanel(info);
             if (info.isUrgent()) {
                 requetePanel.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
@@ -104,7 +100,7 @@ public class Requetes extends VBox {
         information.getChildren().clear();
         information.getChildren().addAll(panneUrgent);
 
-        for (Info info : listRequetes) {
+        for (InfoRequetes info : listRequetes) {
             if(!info.isUrgent()){
                 RequetePanel requetePanel = new RequetePanel(info);
                 requetePanel.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
@@ -140,7 +136,7 @@ public class Requetes extends VBox {
                 double buttonX = buttonBounds.getMinX();
                 double buttonY = buttonBounds.getMaxY();
 
-                Filtres dialog = new Filtres((Stage) getScene().getWindow());
+                FiltresRequetes dialog = new FiltresRequetes((Stage) getScene().getWindow());
                 dialog.setX(buttonX);
                 dialog.setY(buttonY);
                 dialog.showAndWait().ifPresent(filter -> {
@@ -151,7 +147,7 @@ public class Requetes extends VBox {
                         System.out.println("Urgence");
                         information.getChildren().clear();
                         panneUrgent.clear();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             RequetePanel requetePanel = new RequetePanel(info);
                             if (info.isUrgent()) {
                                 requetePanel.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
@@ -161,7 +157,7 @@ public class Requetes extends VBox {
                         information.getChildren().clear();
                         information.getChildren().addAll(panneUrgent);
 
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if(!info.isUrgent()){
                                 RequetePanel requetePanel = new RequetePanel(info);
                                 requetePanel.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
@@ -174,14 +170,14 @@ public class Requetes extends VBox {
                         System.out.println("Service");
                         information.getChildren().clear();
                         Map<String, List<RequetePanel>> serviceRequests = new HashMap<>();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (!serviceRequests.containsKey(info.getType())) {
                                 serviceRequests.put(info.getType(), new ArrayList<>());
                             }
                             serviceRequests.get(info.getType()).add(new RequetePanel(info));
                         }
                         for (String serviceType : serviceRequests.keySet()) {
-                            PanelsFiltre panelsFiltre = new PanelsFiltre(serviceType);
+                            PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes(serviceType);
                             panelsFiltre.setContent(serviceRequests.get(serviceType));
                             information.getChildren().add(panelsFiltre);
                         }
@@ -191,14 +187,14 @@ public class Requetes extends VBox {
                         System.out.println("Medecin");
                         information.getChildren().clear();
                         Map<String, List<RequetePanel>> medecinRequests = new HashMap<>();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (!medecinRequests.containsKey(info.getMedecin())) {
                                 medecinRequests.put(info.getMedecin(), new ArrayList<>());
                             }
                             medecinRequests.get(info.getMedecin()).add(new RequetePanel(info));
                         }
                         for (String medecinType : medecinRequests.keySet()) {
-                            PanelsFiltre panelsFiltre = new PanelsFiltre(medecinType);
+                            PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes(medecinType);
                             panelsFiltre.setContent(medecinRequests.get(medecinType));
                             information.getChildren().add(panelsFiltre);
                         }
@@ -208,14 +204,14 @@ public class Requetes extends VBox {
                         System.out.println("Patient");
                         information.getChildren().clear();
                         Map<String, List<RequetePanel>> patientRequests = new HashMap<>();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (!patientRequests.containsKey(info.getPatient())) {
                                 patientRequests.put(info.getPatient(), new ArrayList<>());
                             }
                             patientRequests.get(info.getPatient()).add(new RequetePanel(info));
                         }
                         for (String patientType : patientRequests.keySet()) {
-                            PanelsFiltre panelsFiltre = new PanelsFiltre(patientType);
+                            PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes(patientType);
                             panelsFiltre.setContent(patientRequests.get(patientType));
                             information.getChildren().add(panelsFiltre);
                         }
@@ -223,11 +219,11 @@ public class Requetes extends VBox {
                     if(filterName.equals("Date") && filterValue) {
                         System.out.println("Date");
                         information.getChildren().clear();
-                        Collections.sort(listRequetes, new Comparator<Info>() {
+                        Collections.sort(listRequetes, new Comparator<InfoRequetes>() {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 
                             @Override
-                            public int compare(Info info1, Info info2) {
+                            public int compare(InfoRequetes info1, InfoRequetes info2) {
                                 try {
                                     return sdf.parse(info1.getDate()).compareTo(sdf.parse(info2.getDate()));
                                 } catch (ParseException e) {
@@ -238,11 +234,11 @@ public class Requetes extends VBox {
                         });
 
                         // Create PanelsFiltre to hold all requests
-                        PanelsFiltre panelsFiltre = new PanelsFiltre("Toutes les requêtes");
+                        PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes("Toutes les rendez-vous");
 
                         // Add sorted requests to PanelsFiltre
                         List<RequetePanel> requetesPanels = new ArrayList<>();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             requetesPanels.add(new RequetePanel(info));
                         }
                         panelsFiltre.setContent(requetesPanels);
@@ -251,11 +247,11 @@ public class Requetes extends VBox {
                     if(filterName.equals("Date2") && filterValue) {
                         System.out.println("Date2");
                         information.getChildren().clear();
-                        Collections.sort(listRequetes, new Comparator<Info>() {
+                        Collections.sort(listRequetes, new Comparator<InfoRequetes>() {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 
                             @Override
-                            public int compare(Info info1, Info info2) {
+                            public int compare(InfoRequetes info1, InfoRequetes info2) {
                                 try {
                                     return sdf.parse(info2.getDate()).compareTo(sdf.parse(info1.getDate()));
                                 } catch (ParseException e) {
@@ -266,11 +262,11 @@ public class Requetes extends VBox {
                         });
 
                         // Create PanelsFiltre to hold all requests
-                        PanelsFiltre panelsFiltre = new PanelsFiltre("Toutes les requêtes");
+                        PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes("Toutes les rendez-vous");
 
                         // Add sorted requests to PanelsFiltre
                         List<RequetePanel> requetesPanels = new ArrayList<>();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             requetesPanels.add(new RequetePanel(info));
                         }
                         panelsFiltre.setContent(requetesPanels);
@@ -284,7 +280,7 @@ public class Requetes extends VBox {
             @Override
             public void handle(ActionEvent event) {
                 information.getChildren().clear();
-                for (Info info : listRequetes) {
+                for (InfoRequetes info : listRequetes) {
                     RequetePanel requetePanel = new RequetePanel(info);
                     if (info.isUrgent()) {
                         requetePanel.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
@@ -294,7 +290,7 @@ public class Requetes extends VBox {
                 information.getChildren().clear();
                 information.getChildren().addAll(panneUrgent);
 
-                for (Info info : listRequetes) {
+                for (InfoRequetes info : listRequetes) {
                     if(!info.isUrgent()){
                         RequetePanel requetePanel = new RequetePanel(info);
                         requetePanel.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
@@ -311,7 +307,7 @@ public class Requetes extends VBox {
                 double buttonX = buttonBounds.getMinX();
                 double buttonY = buttonBounds.getMaxY();
 
-                Search dialog = new Search((Stage) getScene().getWindow());
+                SearchRequetes dialog = new SearchRequetes((Stage) getScene().getWindow());
                 dialog.setX(buttonX);
                 dialog.setY(buttonY);
                 dialog.showAndWait().ifPresent(search -> {
@@ -348,7 +344,7 @@ public class Requetes extends VBox {
                         System.out.println("nomPatient");
                         information.getChildren().clear();
                         String nom = dialog.getNomPatient();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getPatient().contains(nom)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -358,7 +354,7 @@ public class Requetes extends VBox {
                         System.out.println("prenomPatient");
                         information.getChildren().clear();
                         String prenom = dialog.getPrenomPatient();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getPatient().contains(prenom)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -368,7 +364,7 @@ public class Requetes extends VBox {
                         System.out.println("nomMedecin");
                         information.getChildren().clear();
                         String nom = dialog.getNomMedecin();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getMedecin().contains(nom)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -378,7 +374,7 @@ public class Requetes extends VBox {
                         System.out.println("prenomMedecin");
                         information.getChildren().clear();
                         String prenom = dialog.getPrenomMedecin();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getMedecin().contains(prenom)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -389,7 +385,7 @@ public class Requetes extends VBox {
                         information.getChildren().clear();
                         String nom1 = dialog.getNomPatient();
                         String nom2 = dialog.getNomMedecin();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getPatient().contains(nom1) && info.getMedecin().contains(nom2)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -400,7 +396,7 @@ public class Requetes extends VBox {
                         information.getChildren().clear();
                         String nom1 = dialog.getNomPatient();
                         String prenom2 = dialog.getPrenomMedecin();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getPatient().contains(nom1) && info.getMedecin().contains(prenom2)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -411,7 +407,7 @@ public class Requetes extends VBox {
                         information.getChildren().clear();
                         String nom2 = dialog.getNomMedecin();
                         String nom1 = dialog.getNomPatient();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getMedecin().contains(nom2) && info.getPatient().contains(nom1)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -422,7 +418,7 @@ public class Requetes extends VBox {
                         information.getChildren().clear();
                         String prenom2 = dialog.getPrenomMedecin();
                         String nom1 = dialog.getNomPatient();
-                        for (Info info : listRequetes) {
+                        for (InfoRequetes info : listRequetes) {
                             if (info.getMedecin().contains(prenom2) && info.getPatient().contains(nom1)) {
                                 information.getChildren().add(new RequetePanel(info));
                             }
@@ -441,13 +437,13 @@ public class Requetes extends VBox {
     public void recherchePatient(String nom, String prenom) {
         information.getChildren().clear();
         List<RequetePanel> resultats = new ArrayList<>();
-        for (Info info : listRequetes) {
+        for (InfoRequetes info : listRequetes) {
             if (info.getPatient().equals(prenom + " " + nom)) {
                 resultats.add(new RequetePanel(info));
             }
         }
         if (!resultats.isEmpty()) {
-            PanelsFiltre panelsFiltre = new PanelsFiltre("Résultats de recherche pour " + nom + " " + prenom);
+            PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes("Résultats de recherche pour " + nom + " " + prenom);
             panelsFiltre.setContent(resultats);
             information.getChildren().add(panelsFiltre);
         } else {
@@ -458,13 +454,13 @@ public class Requetes extends VBox {
     public void rechercheMedecin(String nom, String prenom) {
         information.getChildren().clear();
         List<RequetePanel> resultats = new ArrayList<>();
-        for (Info info : listRequetes) {
+        for (InfoRequetes info : listRequetes) {
             if (info.getMedecin().equals(prenom + " " + nom)) {
                 resultats.add(new RequetePanel(info));
             }
         }
         if (!resultats.isEmpty()) {
-            PanelsFiltre panelsFiltre = new PanelsFiltre("Résultats de recherche pour " + nom + " " + prenom);
+            PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes("Résultats de recherche pour " + nom + " " + prenom);
             panelsFiltre.setContent(resultats);
             information.getChildren().add(panelsFiltre);
         } else {
@@ -476,13 +472,13 @@ public class Requetes extends VBox {
     public void recherchePatientEtMedecin(String nom1, String prenom1, String nom2, String prenom2) {
             information.getChildren().clear();
             List<RequetePanel> resultats = new ArrayList<>();
-            for (Info info : listRequetes) {
+            for (InfoRequetes info : listRequetes) {
                 if (info.getPatient().equals(prenom1 + " " + nom1)&& info.getMedecin().equals(prenom2 + " " + nom2)){
                     resultats.add(new RequetePanel(info));
                 }
             }
             if (!resultats.isEmpty()) {
-                PanelsFiltre panelsFiltre = new PanelsFiltre("Résultats de recherche:");
+                PanelsFiltreRequetes panelsFiltre = new PanelsFiltreRequetes("Résultats de recherche:");
                 panelsFiltre.setContent(resultats);
                 information.getChildren().add(panelsFiltre);
             } else {

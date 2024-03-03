@@ -1,6 +1,7 @@
-package Interface;
+package Interface.connection;
 
 
+import Interface.secretaire.Secretaire;
 import interfaceUser.Sql_handler;
 import interfaceUser.encrypteur;
 import interfaceUser.hub_medecin_et_observateur;
@@ -140,7 +141,9 @@ public class Connection extends Application {
                         System.out.println("nique ta mere");
                         break;
                     case (1):
-                        // ouviri le panel secretaire
+                        primaryStage.close();
+                        Secretaire secretaire = new Secretaire();
+                        secretaire.start(primaryStage);
                         break;
                     case (2):
                         new hub_medecin_et_observateur(false, user).setVisible(true);

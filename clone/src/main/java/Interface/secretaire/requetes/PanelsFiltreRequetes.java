@@ -3,15 +3,14 @@ package Interface.secretaire.requetes;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PanelsFiltre extends VBox{
+public class PanelsFiltreRequetes extends VBox{
     String serviceName;
     Label serviceNameLabel;
 
     VBox content = new VBox(10); // Liste des requêtes
-    public PanelsFiltre(String serviceName) {
+    public PanelsFiltreRequetes(String serviceName) {
         serviceNameLabel  = new Label(serviceName);
         Label trait= new Label("------------------------------------------------------------------");
         this.getChildren().addAll(serviceNameLabel, trait, content);

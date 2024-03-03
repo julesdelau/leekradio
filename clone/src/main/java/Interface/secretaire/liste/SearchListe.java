@@ -1,4 +1,4 @@
-package Interface.secretaire.requetes;
+package Interface.secretaire.liste;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -9,7 +9,7 @@ import javafx.util.Pair;
 
 import static javafx.stage.StageStyle.UNDECORATED;
 
-public class Search extends Dialog<Pair<String, Boolean>> {
+public class SearchListe extends Dialog<Pair<String, Boolean>> {
     Label nomPatientSearch = new Label("Entrer le nom du patient: ");
     TextField nomPatientField = new TextField();
     Label prenomPatientSearch = new Label("Prénom: ");
@@ -22,7 +22,12 @@ public class Search extends Dialog<Pair<String, Boolean>> {
     TextField nomMedecinField = new TextField();
     Label prenomMedecinSearch = new Label("Prénom: ");
     TextField prenomMedecinField = new TextField();
-    public Search(Stage ownerStage) {
+
+    Label ou1 = new Label("OU");
+    Label dateSearch = new Label("Entrer la date: ");
+    TextField dateField = new TextField();
+
+    public SearchListe(Stage ownerStage) {
 
 
         HBox patient = new HBox(10);
@@ -33,8 +38,12 @@ public class Search extends Dialog<Pair<String, Boolean>> {
         medecin.getChildren().addAll(nomMedecinSearch, nomMedecinField, prenomMedecinSearch, prenomMedecinField);
         medecin.setAlignment(Pos.CENTER);
 
+        HBox date = new HBox(10);
+        date.getChildren().addAll(dateSearch, dateField);
+        date.setAlignment(Pos.CENTER);
+
         VBox content = new VBox(10);
-        content.getChildren().addAll(patient, ou, medecin);
+        content.getChildren().addAll(patient, ou, medecin, ou1, date);
 
         getDialogPane().setContent(content);
         ButtonType buttonTypeSearch = new ButtonType("Rechercher", ButtonBar.ButtonData.OK_DONE);
@@ -80,6 +89,9 @@ public class Search extends Dialog<Pair<String, Boolean>> {
                 if(!nomMedecinField.getText().isEmpty() && !prenomMedecinField.getText().isEmpty() && !prenomPatientField.getText().isEmpty()) {
                     return new Pair<>("Medecin et prenomPatient", true);
                 }
+                if(!dateField.getText().isEmpty()) {
+                    return new Pair<>("Date", true);
+                }
             }
             return new Pair<>("", false);
         });
@@ -101,3 +113,4 @@ public class Search extends Dialog<Pair<String, Boolean>> {
         return prenomMedecinField.getText();
     }
 }
+

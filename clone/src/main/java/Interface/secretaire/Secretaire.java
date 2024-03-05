@@ -29,7 +29,10 @@ public class Secretaire extends Application {
     private boolean isProfilOpen = false;
 
     public Secretaire() {
+
         moteur = new Sql_handler();
+
+
     }
 
     @Override
@@ -42,7 +45,6 @@ public class Secretaire extends Application {
         Button list = new Button("Liste des Rendez-vous");
         Button profil = new Button("Profil");
         Button menuButton = new Button("Menu");
-//        Button deconnexion = new Button("Déconnexion");
 
         bonjour.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
@@ -57,25 +59,12 @@ public class Secretaire extends Application {
         menuButton.prefWidthProperty().bind(profil.widthProperty());
         menuButton.prefHeightProperty().bind(profil.heightProperty());
 
-//        ImageView deconnexionIcon = new ImageView(new Image(getClass().getResourceAsStream("/interface/secretaire/images/deconnecter.png")));
-//        deconnexionIcon.setFitHeight(20);
-//        deconnexionIcon.setFitWidth(20);
-//        deconnexion.setGraphic(deconnexionIcon);
+
         ImageView logo = new ImageView(new Image("/images/logo.png"));
         logo.setFitHeight(100);
         logo.setFitWidth(200);
 
-//        AnchorPane logoPanel=new AnchorPane();
-//        logoPanel.setStyle("-fx-background-color: white;");
-//          AnchorPane.setTopAnchor(logo, 10.0);
-//        AnchorPane.setLeftAnchor(logo, 10.0);
-//        
-//            logoPanel.setTopAnchor(logo, 0.0);
-//            logoPanel.setLeftAnchor(logo, 0.0);
-//            double topOffset = (logo.getHeight() + logo.getWidth()) / 2;
-//            AnchorPane.setTopAnchor(logo, topOffset);
-//            logoPanel.setTopAnchor(logo, topOffset);
-//        logoPanel.getChildren().addAll(logo);
+
         // Uniformiser la taille des boutons
         programme.setPrefSize(180, 50);
         calendar.setPrefSize(180, 50);
@@ -128,62 +117,21 @@ public class Secretaire extends Application {
         // Création du conteneur principal BorderPane
         BorderPane root = new BorderPane();
 
-//        logoPanel.toFront();
-//        root.setTop(logoPanel);
-        root.setTop(header);
-        root.setLeft(menu);
-        root.setCenter(panelVide);
 
-//        root.getChildren().add(logoPanel);
-        // Ajout des marges entre les éléments du BorderPane
-//        BorderPane.setMargin(menu, new Insets(10));
         BorderPane.setMargin(panelVide, new Insets(10));
 
         Profil profilPanel = new Profil();
 
-//                VBox content = new VBox();
-//        content.getChildren().addAll(root, profilPanel);
-//
-//        StackPane stackPane = new StackPane();
-//        stackPane.getChildren().addAll(profilPanel,root);
 // 
         root.setTop(header);
         root.setLeft(menu);
         root.setCenter(panelVide);
 
-        // Action à effectuer lorsque le bouton profil est cliqué
-//        // Action à effectuer lorsque la souris passe sur le bouton
-//        profil.setOnMouseEntered(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                // Afficher le panneau Profil
-//                System.out.println("entrer");
-//                profilPanel.show();
-//            }
-//        });
-//
-//        // Action à effectuer lorsque la souris quitte le bouton
-//        profil.setOnMouseExited(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                // Cacher le panneau Profil
-//                System.out.println("sortie");
-//                profilPanel.hide();
-//            }
-//        });
-        // Action à effectuer lors du clic sur le bouton "Déconnexion"
-//        deconnexion.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                // Mettez ici le code à exécuter lorsque le bouton "Déconnexion" est cliqué
-//                System.out.println("Bouton Déconnexion cliqué !");
-//            }
-//        });
+
         // Action à effectuer lors du clic sur le bouton "Programme"
         programme.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                // Mettez ici le code à exécuter lorsque le bouton "Profil" est cliqué
                 System.out.println("Bouton Programme cliqué !");
                 isProfilOpen = false;
                 panelVide.getChildren().clear();
@@ -220,7 +168,7 @@ public class Secretaire extends Application {
         calendar.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                // Mettez ici le code à exécuter lorsque le bouton "Profil" est cliqué
+
                 System.out.println("Bouton Calendrier cliqué !");
                 isProfilOpen = false;
                 panelVide.getChildren().clear();
@@ -257,7 +205,7 @@ public class Secretaire extends Application {
         request.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                // Mettez ici le code à exécuter lorsque le bouton "Profil" est cliqué
+
                 System.out.println("Bouton Requetes cliqué !");
                 isProfilOpen = false;
                 panelVide.getChildren().clear();
@@ -295,7 +243,7 @@ public class Secretaire extends Application {
         list.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                // Mettez ici le code à exécuter lorsque le bouton "Profil" est cliqué
+
                 System.out.println("Bouton Liste cliqué !");
                 isProfilOpen = false;
                 panelVide.getChildren().clear();
@@ -338,9 +286,7 @@ public class Secretaire extends Application {
                     StackPane stackPane = new StackPane();
                     stackPane.getChildren().addAll(root.getCenter(), profilPanel);
                     StackPane.setAlignment(profilPanel, Pos.CENTER);
-                    //root.setPrefSize(profilPanel.getPrefWidth(), profilPanel.getPrefHeight());
                     root.setCenter(stackPane);
-//                    root.setCenter(profilPanel);
                     profilPanel.toFront();
                     profilPanel.show();
 

@@ -16,11 +16,10 @@ public class ListePanel extends VBox{
 
 
         Button details = new Button("Détails");
-        Button refuse = new Button("Refuser");
-        Button accept = new Button("Accepter");
+
 
         HBox buttons = new HBox(10);
-        buttons.getChildren().addAll(details, refuse, accept);
+        buttons.getChildren().addAll(details);
         buttons.setPadding(new Insets(10));
 
         VBox labels = new VBox(10);
@@ -31,13 +30,7 @@ public class ListePanel extends VBox{
 
 
         VBox pane = new VBox();
-//        AnchorPane.setTopAnchor(labels, 10.0);
-//        AnchorPane.setLeftAnchor(labels, 10.0);
-//        AnchorPane.setBottomAnchor(buttons, 10.0);
-//        AnchorPane.setRightAnchor(buttons, 10.0);
-//        double topOffset = (pane.getHeight() + pane.getWidth()) / 2;
-//        AnchorPane.setTopAnchor(labels, topOffset);
-//        AnchorPane.setBottomAnchor(buttons, topOffset);
+
         pane.getChildren().addAll(labels, buttons);
 
         this.getChildren().add(pane);

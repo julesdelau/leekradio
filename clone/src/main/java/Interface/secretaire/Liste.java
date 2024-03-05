@@ -73,7 +73,7 @@ public class Liste extends VBox {
 
 
 
-        listRDV.add(new InfoListe("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont"));
+        listRDV.add(new InfoListe("Genou", "Yves Vert", "2024-03-03-08-36", "Anna Dupont"));
         listRDV.add(new InfoListe("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont"));
         listRDV.add(new InfoListe("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont"));
         listRDV.add(new InfoListe("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont"));
@@ -256,7 +256,7 @@ public class Liste extends VBox {
                     if(filterName.equals("DateDuJour") && filterValue) {
                         System.out.println("DateDuJour");
                         information.getChildren().clear();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
                         String dateDuJour = sdf.format(date);
                         List<ListePanel> resultats = new ArrayList<>();

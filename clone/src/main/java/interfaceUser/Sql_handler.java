@@ -19,6 +19,10 @@ public class Sql_handler {
     ResultSetMetaData rsmd;
 
     public Sql_handler() {
+        
+    }
+
+    public void SeConnecter() {
         // Nom de la classe pour le pilote Oracle
         String jdbcDriver = "oracle.jdbc.driver.OracleDriver";
 
@@ -55,8 +59,22 @@ public class Sql_handler {
             System.out.println("Problème de connexion. Vérifiez votre configuration réseau.");
         }
     }
+    
+    public void quit(){
+        String sql="QUIT";
+         try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+
+        }
+        
+    }
 
     public int connection(String user, String mdp) {
+        SeConnecter();
         int retour = 0;
         String sql = "SELECT specialite FROM identite WHERE id='" + user + "' AND mdp='" + mdp + "'";
         try {
@@ -67,11 +85,12 @@ public class Sql_handler {
             retour = rs.getInt(1);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            System.out.println("suis la");
+          
 
         }
-
+quit();
         return retour;
+        
     }
 
     public String createdate(int year, int month, int day) {
@@ -83,7 +102,27 @@ public class Sql_handler {
         return sortie;
     }
 
+    public int initialiser() {
+        SeConnecter();
+        String sql = "SELECT * FROM DMRTEST ";
+        try {
+
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            rs.next();
+            quit();
+            return rs.getMetaData().getColumnCount();
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return 0;
+
+        }
+
+    }
+
     public Vector<String> listpatient(boolean istreated) {
+        SeConnecter();
         int traitement;
         Vector<String> sortie = new Vector<String>();
         String sql = "SELECT * FROM DMRTEST ";
@@ -96,6 +135,7 @@ public class Sql_handler {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             rs.next();
+
             for (int i = 0; i < rs.getRow(); i++) {
                 if (rs.getInt(rs.getMetaData().getColumnLabel(rs.getMetaData().getColumnCount())) == traitement) {
                     for (int j = 1; j < rs.getMetaData().getColumnCount(); j++) {// on cemmence ne 1 et fini en nb colonnes +1
@@ -108,26 +148,30 @@ public class Sql_handler {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            System.out.println("suis la");
 
         }
         // System.out.println(sortie);
+        quit();
         return sortie;
     }
 
     public boolean addDmr(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu, int dejatraite) {
+        SeConnecter();
         try {
             String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , '" + date + "' , '" + adresse + "' , '" + photo + "' , '" + compterendu + "' , '" + dejatraite + "')";
             st = connection.createStatement();
             rs = st.executeQuery(sql);
+            quit();
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            quit();
             return false;
         }
     }
 
     public boolean SubmitCR(String CR, String IDMR) {
+        SeConnecter();
         String sql = "UPDATE DMRTEST "
                 + "SET COMPTE_RENDU ='" + CR + "' "
                 + "WHERE IDMR ='" + IDMR + "' ";
@@ -136,11 +180,13 @@ public class Sql_handler {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             System.out.println("fait");
+            quit();
             return true;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
+            quit();
             return false;
 
         }
@@ -148,6 +194,7 @@ public class Sql_handler {
     }
 
     public void ChangerFlag(String IDMR) {
+        SeConnecter();
         // on change l'etat du traitement du patient en deja traité ( flag = 1)
 
         String sql = "UPDATE DMRTEST "
@@ -158,6 +205,7 @@ public class Sql_handler {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             System.out.println("fait");
+            quit();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -166,12 +214,13 @@ public class Sql_handler {
     }
 
     public void CreateTable() {
-        String sql = "CREATE TABLE DMRTEST "
-                + "(IDMR integer NOT NULL, "
-                + " NAME varchar(20) NOT NULL, "
-                + " FIRSTNAME varchar(20) NOT NULL, "
-                + " BIRTHDATE DATE , "
-                + " ADRESSE varchar(120) NOT NULL, "
+        SeConnecter();
+        String sql = "CREATE TABLE DMRTEST "// devient examen
+                + "(IDMR integer NOT NULL, "// devient id examen
+                + " NAME varchar(20) NOT NULL, "// degagera
+                + " FIRSTNAME varchar(20) NOT NULL, "// degagera
+                + " BIRTHDATE DATE , "// devient date de l'exament
+                + " ADRESSE varchar(120) NOT NULL, "// degagera
                 + " IDPHOTO varchar(50) , "
                 + "COMPTE_RENDU varchar(2000) , "
                 + " DEJATRAITE integer NOT NULL, "
@@ -181,6 +230,7 @@ public class Sql_handler {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             System.out.println("fait");
+            quit();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -190,11 +240,13 @@ public class Sql_handler {
     }
 
     public void drop(String table) {
+        SeConnecter();
         String sql = "DROP TABLE " + table;
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             System.out.println("fait");
+            quit();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

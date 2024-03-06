@@ -85,6 +85,7 @@ public class Sql_handler {
         }
 
     }
+   
 
     public int connection(String user, String mdp) {
         SeConnecter();
@@ -251,23 +252,7 @@ public class Sql_handler {
         }
     }
 
-    public void testTps() {
-        this.SeConnecter();
-        String sql = "SELECT * FROM ui";
-        try {
-            st = connection.createStatement();
-            rs = st.executeQuery(sql);
-            System.out.println("fait");
-            rs.next();
-            System.out.println(rs.getString(1));
-            //quit();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCause());
-
-        }
-    }
+   
 
     public void drop(String table) {
         SeConnecter();

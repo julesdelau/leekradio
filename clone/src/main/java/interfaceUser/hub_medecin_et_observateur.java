@@ -30,16 +30,39 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
      */
     public hub_medecin_et_observateur(boolean is_medecin, String name) {
         initComponents();
+
         jLabel1.setText(name);
         this.name = name;
         this.is_medecin = is_medecin;
         // a changer le chiffre ds l'initialisation
-         donnePatientATraiter = s.ListeExaments(false);
+        donnePatientATraiter = s.ListeExaments(false);
         donnePatientDejaTraiter = s.ListeExaments(true);
         AffichageListes();
-        
+
     }
-    public void AffichageListes(){
+
+    public void UpdateList(){
+          affichageATraiter.clear();
+                affichageDejaTraiter.clear();
+                // remplir les données des patients a traiter
+                int i = 0;
+                while (i < donnePatientDejaTraiter.size()) {
+                    affichageDejaTraiter.add(donnePatientDejaTraiter.get(i + 1) + " " + donnePatientDejaTraiter.get(i + 2));
+                    i += nbComposantes;
+                }
+                // remplir les données des patient deja traités
+                i = 0;
+                while (i < donnePatientATraiter.size()) {
+                    affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
+                    i += nbComposantes;
+                }
+                //AffichageListes();
+                this.listeATraiter.updateUI();
+                this.listeDejaTraiter.updateUI();
+
+    }
+    
+    public void AffichageListes() {
         // voir commen faire pour detruires les anciennes liste d'affichages
         affichageATraiter = new Vector(10);
         affichageDejaTraiter = new Vector(10);
@@ -55,7 +78,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
             affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
             i += nbComposantes;
         }
-     
+
         //
         listeATraiter.setListData(affichageATraiter);
         listeDejaTraiter.setListData(affichageDejaTraiter);
@@ -399,20 +422,11 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                     donnePatientDejaTraiter.add(donnePatientATraiter.get(dossierSelectionne * nbComposantes));
                     donnePatientATraiter.remove(dossierSelectionne * nbComposantes);
                 }
-                
-              
+
                 System.out.println("le changement a été fait");
-                System.out.println(donnePatientATraiter);
-                // refaire l'affichage des listes il y a un pb la pour les liste des patient deja traité pourtaint liste aff est bon le pb vient du valuechanged de la liste patient a traiter qui ne rtrouve plus la valeur
-                //
-                //TROUVER COMMENT RESTER LE PUTAIN DE SELECTIONEVENTLISTENER DE CE MORT  CELUI DES PATIENT A TRAITER
-                //
-                //
-
-
-//AffichageListes();
-                
+                UpdateList();
                
+              
             }
 
         } else {

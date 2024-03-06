@@ -26,19 +26,17 @@ public class Clone {
         Sql_handler h = new Sql_handler();
        // h.drop("DMRTEST");
        // h.CreateTable();
-        int iddmr = 001;
+        int iddmr = 213;
         
-        String nom = "jean";
-        String prenom = "neymare";
-        String date =h.createdate(2005, 5, 24);
+        String nom = "jeannnnnnnnnnne";
+        String prenom = "neymmmmmmarette";
+        String date =h.createdate(2005, 5, 24,20,20);
         
         String adresse = "24 grand trou";
         String photo = "1";
         String compterendu = "yapa00000000000000000000000000";
-       // h.addDmr(iddmr, nom, prenom,date , adresse, photo, compterendu,0);
-       // h.addDmr(2, "delaurenti", "jules",h.createdate(2002, 01, 24) , "22 rue pixerecourt , paris", photo, compterendu,0);
-       // h.addDmr(3, "meuh", "patient 2",h.createdate(2005, 11, 21) , adresse, photo, compterendu,1);
-       // h.addDmr(4, "ivan", "sebastion",h.createdate(iddmr, iddmr, iddmr) , adresse, photo, compterendu,1);
-       // h.addDmr(5," jean", "prenom",h.createdate(iddmr, iddmr, iddmr) , adresse, photo, compterendu,0);
+      // h.AddExamen(iddmr, nom, prenom,date , adresse, photo, compterendu,0);
+       //h.testTps();
+       //h.getimages();
     }
 }

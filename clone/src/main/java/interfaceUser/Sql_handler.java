@@ -4,8 +4,20 @@
  */
 package interfaceUser;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import oracle.sql.BLOB;
 
 /**
  *
@@ -19,7 +31,7 @@ public class Sql_handler {
     ResultSetMetaData rsmd;
 
     public Sql_handler() {
-        
+
     }
 
     public void SeConnecter() {
@@ -59,18 +71,19 @@ public class Sql_handler {
             System.out.println("Problème de connexion. Vérifiez votre configuration réseau.");
         }
     }
-    
-    public void quit(){
-        String sql="QUIT";
-         try {
+
+    public void quit() {// ne marche pas
+        String sql = "QUIT";
+        try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+            System.out.println("erreur de quit");
 
         }
-        
+
     }
 
     public int connection(String user, String mdp) {
@@ -85,20 +98,19 @@ public class Sql_handler {
             retour = rs.getInt(1);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-          
 
         }
-quit();
+        quit();
         return retour;
-        
+
     }
 
-    public String createdate(int year, int month, int day) {
+    public String createdate(int year, int month, int day,int hour , int minutes) {
         if (day > 31 || month > 12) {
-            return "01/01/0000";
+            return "01/01/1990 ";
 
         }
-        String sortie = "" + day + "/" + month + "/" + year;
+        String sortie = "" + day + "/" + month + "/" + year +" "+hour+":"+minutes;
         return sortie;
     }
 
@@ -121,7 +133,7 @@ quit();
 
     }
 
-    public Vector<String> listpatient(boolean istreated) {
+    public Vector<String> ListeExaments(boolean istreated) {
         SeConnecter();
         int traitement;
         Vector<String> sortie = new Vector<String>();
@@ -155,10 +167,10 @@ quit();
         return sortie;
     }
 
-    public boolean addDmr(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu, int dejatraite) {
+    public boolean AddExamen(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu, int dejatraite) {
         SeConnecter();
         try {
-            String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , '" + date + "' , '" + adresse + "' , '" + photo + "' , '" + compterendu + "' , '" + dejatraite + "')";
+            String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , "+ " TO_DATE('" + date + "' , 'DD/MM/YYYY HH24:MI')" + " , '" + adresse + "' , '" + photo + "' , '" + compterendu + "' , '" + dejatraite + "')";
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             quit();
@@ -239,6 +251,24 @@ quit();
         }
     }
 
+    public void testTps() {
+        this.SeConnecter();
+        String sql = "SELECT * FROM ui";
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("fait");
+            rs.next();
+            System.out.println(rs.getString(1));
+            //quit();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+
+        }
+    }
+
     public void drop(String table) {
         SeConnecter();
         String sql = "DROP TABLE " + table;
@@ -246,6 +276,7 @@ quit();
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             System.out.println("fait");
+
             quit();
 
         } catch (SQLException e) {
@@ -253,6 +284,48 @@ quit();
             System.out.println(e.getCause());
 
         }
+    }
+
+    public void getimages() {
+        SeConnecter();
+        String sql = "SELECT * FROM imagetest";
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            System.out.println("fait");
+            rs.next();
+
+            for (int j = 0; j < rs.getRow(); j++) {//premiere colonne id image , secobde image
+                // System.out.println(rs.getString(1));
+
+                Blob monimage = rs.getBlob(2);
+
+                
+                BufferedImage image;
+                try {
+                    int blobLength = (int) monimage.length();
+                byte[] blobAsBytes = monimage.getBytes(1, blobLength);
+                System.out.println("Length" + blobLength);
+
+                System.out.println("testlen" + blobAsBytes.length);
+
+                    image = ImageIO.read(new ByteArrayInputStream(blobAsBytes));
+                    
+                    rs.next();
+                } catch (IOException ex) {
+                    Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
+            // quit();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+
+        }
+
+        //test d'un parser
     }
 }
 // table identite(id,mdp,specialite,nom , prenom)id des medic secret et manip

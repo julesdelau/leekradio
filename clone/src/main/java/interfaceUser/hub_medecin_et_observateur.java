@@ -34,8 +34,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         this.name = name;
         this.is_medecin = is_medecin;
         // a changer le chiffre ds l'initialisation
-         donnePatientATraiter = s.listpatient(false);
-        donnePatientDejaTraiter = s.listpatient(true);
+         donnePatientATraiter = s.ListeExaments(false);
+        donnePatientDejaTraiter = s.ListeExaments(true);
         AffichageListes();
         
     }
@@ -55,7 +55,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
             affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
             i += nbComposantes;
         }
-       
+     
         //
         listeATraiter.setListData(affichageATraiter);
         listeDejaTraiter.setListData(affichageDejaTraiter);

@@ -9,10 +9,10 @@ import javafx.scene.layout.VBox;
 
 public class ListePanel extends VBox{
     public ListePanel(InfoListe info) {
-        Label type = new Label(info.getType());
-        Label medecin = new Label(info.getMedecin());
-        Label date = new Label(info.getDate());
-        Label patient = new Label(info.getPatient());
+        Label type = new Label(info.getTypeRdv());
+        Label medecin = new Label(info.getMedecinRdv());
+        Label date = new Label(info.getDateRdv());
+        Label patient = new Label(info.getPatientRdv());
 
 
         Button details = new Button("Détails");

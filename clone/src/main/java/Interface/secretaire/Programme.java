@@ -8,7 +8,10 @@ package Interface.secretaire;
 import Interface.secretaire.programme.Recap;
 import Interface.secretaire.programme.InscriptionPatient;
 import Interface.secretaire.programme.Autres;
+import interfaceUser.Sql_handler2;
+import Interface.connection.Connection;
 
+import interfaceUser.Sql_handler2;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,18 +27,25 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import java.util.List;
+
+
 
 /**
  *
  * @author leoce
  */
 public class Programme extends VBox {
-
-    public Programme() {
+    private Connection connection;
+    public Programme(Connection connection) {
+        this.connection = connection;
+        Sql_handler2 sqlHandler = new Sql_handler2();
         Insets insets = new Insets(10);
         // Création des composants
         Label labelFiche = new Label("Fiche Rendez-vous");
-        Label niupLabel = new Label("Entrer le numéro d'identifiant unique du patient: ");
+        Label niupLabel = new Label("Entrer le nom du patient: ");
 
         TextField niup = new TextField();
 
@@ -116,18 +126,45 @@ public class Programme extends VBox {
             @Override
             public void handle(ActionEvent event) {
                 autrePanel.getChildren().clear();
-                Recap nouveauPanel = new Recap();
-                autrePanel.getChildren().addAll(nouveauPanel);
 
+                String nuipText = niup.getText();
+                if (!nuipText.isEmpty()) {
+                    List<String[]> patientDataList = sqlHandler.getPatientsByName(nuipText);
+                    if (!patientDataList.isEmpty()) {
+                        for (String[] patientData : patientDataList) {
+                            String nom = patientData[0];
+                            String prenom = patientData[1];
+                            String sexe = patientData[2];
+                            String adresse = patientData[3];
+                            String dateNaissance = patientData[4];
+
+                            // Utilisez ces données pour créer ou afficher des éléments
+                            Recap nouveauPanel = new Recap(nom, prenom, sexe, adresse, dateNaissance);
+                            autrePanel.getChildren().addAll(nouveauPanel);
+                        }
+                    } else {
+                        Alert alert = new Alert(AlertType.WARNING);
+                        alert.setTitle("Aucun patient trouvé");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Aucun patient trouvé avec le NUIP spécifié.");
+                        alert.showAndWait();
+                    }
+                } else {
+                    Alert alert = new Alert(AlertType.WARNING);
+                    alert.setTitle("NUIP manquant");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Veuillez entrer le NUIP du patient.");
+                    alert.showAndWait();
+                }
             }
-
         });
+
 
         pasNuip.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 autrePanel.getChildren().clear();
-                InscriptionPatient nouveauPanel = new InscriptionPatient();
+                InscriptionPatient nouveauPanel = new InscriptionPatient(connection);
                 autrePanel.getChildren().addAll(nouveauPanel);
 
             }

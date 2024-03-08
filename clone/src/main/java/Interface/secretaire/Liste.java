@@ -6,6 +6,7 @@
 package Interface.secretaire;
 
 import Interface.secretaire.liste.*;
+import interfaceUser.Sql_handler2;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -33,7 +34,9 @@ import java.util.*;
 public class Liste extends VBox {
 
     VBox information = new VBox(10);
+    Sql_handler2 sql = new Sql_handler2();
     List<InfoListe> listRDV = new ArrayList<>();
+    List<InfoListe> rdvRecuperes;
 
     public Liste() {
         Insets insets = new Insets(10);
@@ -72,14 +75,9 @@ public class Liste extends VBox {
 
 
 
+        rdvRecuperes=sql.getRdv();
+        listRDV.addAll(rdvRecuperes);
 
-        listRDV.add(new InfoListe("Genou", "Yves Vert", "2024-03-03-08-36", "Anna Dupont"));
-        listRDV.add(new InfoListe("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont"));
-        listRDV.add(new InfoListe("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont"));
-        listRDV.add(new InfoListe("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont"));
-        listRDV.add(new InfoListe("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont"));
-        listRDV.add(new InfoListe("Coude", "Oscar Dupont", "2024-02-25-14-00", "Anna Dupont"));
-        listRDV.add(new InfoListe("Genou", "Yves Vert", "2025-05-05-08-36", "Anna Dupont"));
 
 
         List<ListePanel> panneUrgent = new ArrayList<>();
@@ -91,7 +89,7 @@ public class Liste extends VBox {
             @Override
             public int compare(InfoListe info1, InfoListe info2) {
                 try {
-                    return sdf.parse(info1.getDate()).compareTo(sdf.parse(info2.getDate()));
+                    return sdf.parse(info1.getDateRdv()).compareTo(sdf.parse(info2.getDateRdv()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                     return 0;
@@ -151,10 +149,10 @@ public class Liste extends VBox {
                         information.getChildren().clear();
                         Map<String, List<ListePanel>> serviceRequests = new HashMap<>();
                         for (InfoListe info : listRDV) {
-                            if (!serviceRequests.containsKey(info.getType())) {
-                                serviceRequests.put(info.getType(), new ArrayList<>());
+                            if (!serviceRequests.containsKey(info.getTypeRdv())) {
+                                serviceRequests.put(info.getTypeRdv(), new ArrayList<>());
                             }
-                            serviceRequests.get(info.getType()).add(new ListePanel(info));
+                            serviceRequests.get(info.getTypeRdv()).add(new ListePanel(info));
                         }
                         for (String serviceType : serviceRequests.keySet()) {
                             PanelsFiltreListe panelsFiltre = new PanelsFiltreListe(serviceType);
@@ -168,10 +166,10 @@ public class Liste extends VBox {
                         information.getChildren().clear();
                         Map<String, List<ListePanel>> medecinRequests = new HashMap<>();
                         for (InfoListe info : listRDV) {
-                            if (!medecinRequests.containsKey(info.getMedecin())) {
-                                medecinRequests.put(info.getMedecin(), new ArrayList<>());
+                            if (!medecinRequests.containsKey(info.getMedecinRdv())) {
+                                medecinRequests.put(info.getMedecinRdv(), new ArrayList<>());
                             }
-                            medecinRequests.get(info.getMedecin()).add(new ListePanel(info));
+                            medecinRequests.get(info.getMedecinRdv()).add(new ListePanel(info));
                         }
                         for (String medecinType : medecinRequests.keySet()) {
                             PanelsFiltreListe panelsFiltre = new PanelsFiltreListe(medecinType);
@@ -185,10 +183,10 @@ public class Liste extends VBox {
                         information.getChildren().clear();
                         Map<String, List<ListePanel>> patientRequests = new HashMap<>();
                         for (InfoListe info : listRDV) {
-                            if (!patientRequests.containsKey(info.getPatient())) {
-                                patientRequests.put(info.getPatient(), new ArrayList<>());
+                            if (!patientRequests.containsKey(info.getPatientRdv())) {
+                                patientRequests.put(info.getPatientRdv(), new ArrayList<>());
                             }
-                            patientRequests.get(info.getPatient()).add(new ListePanel(info));
+                            patientRequests.get(info.getPatientRdv()).add(new ListePanel(info));
                         }
                         for (String patientType : patientRequests.keySet()) {
                             PanelsFiltreListe panelsFiltre = new PanelsFiltreListe(patientType);
@@ -205,7 +203,7 @@ public class Liste extends VBox {
                             @Override
                             public int compare(InfoListe info1, InfoListe info2) {
                                 try {
-                                    return sdf.parse(info1.getDate()).compareTo(sdf.parse(info2.getDate()));
+                                    return sdf.parse(info1.getDateRdv()).compareTo(sdf.parse(info2.getDateRdv()));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                     return 0;
@@ -233,7 +231,7 @@ public class Liste extends VBox {
                             @Override
                             public int compare(InfoListe info1, InfoListe info2) {
                                 try {
-                                    return sdf.parse(info2.getDate()).compareTo(sdf.parse(info1.getDate()));
+                                    return sdf.parse(info2.getDateRdv()).compareTo(sdf.parse(info1.getDateRdv()));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                     return 0;
@@ -261,7 +259,7 @@ public class Liste extends VBox {
                         String dateDuJour = sdf.format(date);
                         List<ListePanel> resultats = new ArrayList<>();
                         for (InfoListe info : listRDV) {
-                            if (info.getDate().contains(dateDuJour)) {
+                            if (info.getDateRdv().contains(dateDuJour)) {
                                 resultats.add(new ListePanel(info));
                             }
                         }
@@ -288,7 +286,7 @@ public class Liste extends VBox {
                     @Override
                     public int compare(InfoListe info1, InfoListe info2) {
                         try {
-                            return sdf.parse(info1.getDate()).compareTo(sdf.parse(info2.getDate()));
+                            return sdf.parse(info1.getDateRdv()).compareTo(sdf.parse(info2.getDateRdv()));
                         } catch (ParseException e) {
                             e.printStackTrace();
                             return 0;
@@ -356,7 +354,7 @@ public class Liste extends VBox {
                         information.getChildren().clear();
                         String nom = dialog.getNomPatient();
                         for (InfoListe info : listRDV) {
-                            if (info.getPatient().contains(nom)) {
+                            if (info.getPatientRdv().contains(nom)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -366,7 +364,7 @@ public class Liste extends VBox {
                         information.getChildren().clear();
                         String prenom = dialog.getPrenomPatient();
                         for (InfoListe info : listRDV) {
-                            if (info.getPatient().contains(prenom)) {
+                            if (info.getPatientRdv().contains(prenom)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -376,7 +374,7 @@ public class Liste extends VBox {
                         information.getChildren().clear();
                         String nom = dialog.getNomMedecin();
                         for (InfoListe info : listRDV) {
-                            if (info.getMedecin().contains(nom)) {
+                            if (info.getMedecinRdv().contains(nom)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -386,7 +384,7 @@ public class Liste extends VBox {
                         information.getChildren().clear();
                         String prenom = dialog.getPrenomMedecin();
                         for (InfoListe info : listRDV) {
-                            if (info.getMedecin().contains(prenom)) {
+                            if (info.getMedecinRdv().contains(prenom)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -397,7 +395,7 @@ public class Liste extends VBox {
                         String nom1 = dialog.getNomPatient();
                         String nom2 = dialog.getNomMedecin();
                         for (InfoListe info : listRDV) {
-                            if (info.getPatient().contains(nom1) && info.getMedecin().contains(nom2)) {
+                            if (info.getPatientRdv().contains(nom1) && info.getMedecinRdv().contains(nom2)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -408,7 +406,7 @@ public class Liste extends VBox {
                         String nom1 = dialog.getNomPatient();
                         String prenom2 = dialog.getPrenomMedecin();
                         for (InfoListe info : listRDV) {
-                            if (info.getPatient().contains(nom1) && info.getMedecin().contains(prenom2)) {
+                            if (info.getPatientRdv().contains(nom1) && info.getMedecinRdv().contains(prenom2)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -419,7 +417,7 @@ public class Liste extends VBox {
                         String nom2 = dialog.getNomMedecin();
                         String nom1 = dialog.getNomPatient();
                         for (InfoListe info : listRDV) {
-                            if (info.getMedecin().contains(nom2) && info.getPatient().contains(nom1)) {
+                            if (info.getMedecinRdv().contains(nom2) && info.getPatientRdv().contains(nom1)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -430,7 +428,7 @@ public class Liste extends VBox {
                         String prenom2 = dialog.getPrenomMedecin();
                         String nom1 = dialog.getNomPatient();
                         for (InfoListe info : listRDV) {
-                            if (info.getMedecin().contains(prenom2) && info.getPatient().contains(nom1)) {
+                            if (info.getMedecinRdv().contains(prenom2) && info.getPatientRdv().contains(nom1)) {
                                 information.getChildren().add(new ListePanel(info));
                             }
                         }
@@ -449,7 +447,7 @@ public class Liste extends VBox {
         information.getChildren().clear();
         List<ListePanel> resultats = new ArrayList<>();
         for (InfoListe info : listRDV) {
-            if (info.getPatient().equals(prenom + " " + nom)) {
+            if (info.getPatientRdv().equals(prenom + " " + nom)) {
                 resultats.add(new ListePanel(info));
             }
         }
@@ -466,7 +464,7 @@ public class Liste extends VBox {
         information.getChildren().clear();
         List<ListePanel> resultats = new ArrayList<>();
         for (InfoListe info : listRDV) {
-            if (info.getMedecin().equals(prenom + " " + nom)) {
+            if (info.getMedecinRdv().equals(prenom + " " + nom)) {
                 resultats.add(new ListePanel(info));
             }
         }
@@ -484,7 +482,7 @@ public class Liste extends VBox {
         information.getChildren().clear();
         List<ListePanel> resultats = new ArrayList<>();
         for (InfoListe info : listRDV) {
-            if (info.getPatient().equals(prenom1 + " " + nom1)&& info.getMedecin().equals(prenom2 + " " + nom2)){
+            if (info.getPatientRdv().equals(prenom1 + " " + nom1)&& info.getMedecinRdv().equals(prenom2 + " " + nom2)){
                 resultats.add(new ListePanel(info));
             }
         }

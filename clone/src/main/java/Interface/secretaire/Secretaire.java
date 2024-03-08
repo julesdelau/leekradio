@@ -6,10 +6,11 @@
 package Interface.secretaire;
 
 import Interface.profil.Profil;
+import interfaceUser.Sql_handler;
+import Interface.connection.Connection;
 
 import java.util.*;
 
-import interfaceUser.Sql_handler;
 import javafx.event.*;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -28,8 +29,16 @@ public class Secretaire extends Application {
     AnchorPane header = new AnchorPane();
     private boolean isProfilOpen = false;
 
-    public Secretaire() {
+    Profil profilPanel = new Profil();
 
+    Connection connection;
+
+    public Secretaire() {
+        moteur = new Sql_handler();
+    }
+
+    public Secretaire(Connection connection) {
+        this.connection = connection;
         moteur = new Sql_handler();
 
 
@@ -37,6 +46,7 @@ public class Secretaire extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Secretaire secretaire = new Secretaire(connection);
         // Création des composants
         Label bonjour = new Label("Bienvenue dans votre espace!");
         Button programme = new Button("Programmer Rendez-vous");
@@ -120,7 +130,7 @@ public class Secretaire extends Application {
 
         BorderPane.setMargin(panelVide, new Insets(10));
 
-        Profil profilPanel = new Profil();
+
 
 // 
         root.setTop(header);
@@ -135,7 +145,7 @@ public class Secretaire extends Application {
                 System.out.println("Bouton Programme cliqué !");
                 isProfilOpen = false;
                 panelVide.getChildren().clear();
-                Programme nouveauPanel = new Programme();
+                Programme nouveauPanel = new Programme(connection);
                 nouveauPanel.setAlignment(Pos.CENTER);
 
                 nouveauPanel.prefWidthProperty().bind(panelVide.widthProperty());
@@ -313,8 +323,15 @@ public class Secretaire extends Application {
 
     }
 
+
+
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void mettreAJourUtilisateur(String utilisateur){
+        profilPanel.setUtilisateur(utilisateur);
+
     }
 
 }

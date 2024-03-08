@@ -5,6 +5,8 @@
  */
 package Interface.secretaire.programme;
 
+import interfaceUser.Sql_handler2;
+import Interface.connection.Connection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,27 +17,31 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+
+
+
 /**
  *
  * @author leoce
  */
 public class InscriptionPatient extends VBox{
-    public InscriptionPatient(){
+    private Connection connection;
+    public InscriptionPatient(Connection connection){
+        this.connection = connection;
         Insets insets = new Insets(10);
         // Création des composants
         Label nomLabel = new Label("Nom: ");
         Label prenomLabel = new Label("Prénom: ");
-        Label numSSLabel = new Label("Numéro de securité social: ");
-        Label numTelLabel = new Label("Numéro de téléphone: ");
-        Label emailLabel = new Label("Adresse mail: ");
+        Label sexeLabel = new Label("Sexe: ");
         Label adresseLabel = new Label("Adresse : ");
         Label dateDeNaissanceLabel = new Label("Date de naissance :");
 
         TextField nomField = new TextField();
         TextField prenomField = new TextField();
-        TextField numSSField = new TextField();
-        TextField numTelField = new TextField();
-        TextField emailField = new TextField();
+        TextField sexeField = new TextField();
         TextField adresseField = new TextField();
         TextField dateDeNaissanceField = new TextField();
 
@@ -50,17 +56,13 @@ public class InscriptionPatient extends VBox{
         information.add(nomField, 1, 0);
         information.add(prenomLabel, 2, 0);
         information.add(prenomField, 3, 0);
-        information.add(numSSLabel, 0, 1);
-        information.add(numSSField, 1, 1);
-        information.add(numTelLabel, 0, 2);
-        information.add(numTelField, 1, 2);
-        information.add(emailLabel, 0, 3);
-        information.add(emailField, 1, 3);
-        information.add(adresseLabel, 0, 4);
-        information.add(adresseField, 1, 4);
-        information.add(dateDeNaissanceLabel, 0, 5);
-        information.add(dateDeNaissanceField, 1, 5);
-        information.add(enregistrer, 1, 6, 2, 1);
+        information.add(sexeLabel, 0, 1);
+        information.add(sexeField, 1, 1);
+        information.add(adresseLabel, 0, 2);
+        information.add(adresseField, 1, 2);
+        information.add(dateDeNaissanceLabel, 0, 3);
+        information.add(dateDeNaissanceField, 1, 3);
+        information.add(enregistrer, 1, 4, 2, 1);
 
         BorderPane root = new BorderPane();
         root.setCenter(information);
@@ -72,23 +74,27 @@ public class InscriptionPatient extends VBox{
         this.getChildren().addAll(root);
         this.setPadding(insets);
 
-        Recap recap = new Recap();
+
 
         enregistrer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
                 String nom = nomField.getText();
                 String prenom = prenomField.getText();
-                String numSS = numSSField.getText();
-                String numTel = numTelField.getText();
-                String email = emailField.getText();
+                String sexe = sexeField.getText();
                 String adresse = adresseField.getText();
                 String dateDeNaissance = dateDeNaissanceField.getText();
-                root.getChildren().clear();
 
-                Recap recapPanel = new Recap(nom, prenom, numSS, numTel, email, adresse, dateDeNaissance);
-                root.setCenter(recapPanel);
+                Sql_handler2 sqlHandler = new Sql_handler2();
+                String id = sqlHandler.generateIdPatient();
+
+                sqlHandler.addPatient(id, nom, prenom, sexe, adresse, dateDeNaissance);
+
+                Recap recap;
+
+                root.getChildren().clear();
+                recap = new Recap(nom, prenom, sexe, adresse, dateDeNaissance);
+                root.setCenter(recap);
             }
         });
 

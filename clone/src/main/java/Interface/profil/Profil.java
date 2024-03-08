@@ -7,6 +7,7 @@ package Interface.profil;
 
 import static javafx.application.Application.launch;
 
+import interfaceUser.Sql_handler2;
 import javafx.animation.TranslateTransition;
 import javafx.event.*;
 import javafx.geometry.*;
@@ -17,15 +18,23 @@ import javafx.scene.paint.*;
 import javafx.scene.text.*;
 import javafx.util.Duration;
 
-public class Profil extends VBox {
 
+public class Profil extends VBox {
+    private Label identifiant;
+    private Label nom;
+    private Label prenom;
+    private Sql_handler2 sqlHandler = new Sql_handler2();
     public Profil() {
+        identifiant = new Label("Identifiant: ");
+        nom = new Label();
+        prenom = new Label();
 
         Label fonction = new Label("Espace secrétaire");
         Label nomText = new Label("Nom:");
-        Label nom = new Label("Di Caprio");
         Label prenomText = new Label("Prénom:");
-        Label prenom = new Label("Léo");
+
+
+
 
         Button deconnexion = new Button("Déconnexion");
 
@@ -96,4 +105,17 @@ public class Profil extends VBox {
         System.out.println("hide");
     }
 
+    public void setUtilisateur(String idMedecin) {
+        // Récupérer le nom et le prénom du médecin à partir de l'ID
+        String medecinName = sqlHandler.getMedecinName(idMedecin);
+
+        // Afficher le nom et le prénom du médecin
+        if (medecinName != null && !medecinName.isEmpty()) {
+            String[] parts = medecinName.split(" ");
+            if (parts.length >= 2) {
+                nom.setText(parts[0]);
+                prenom.setText(parts[1]);
+            }
+        }
+    }
 }

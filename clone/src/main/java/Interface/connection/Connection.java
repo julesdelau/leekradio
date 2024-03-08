@@ -2,6 +2,7 @@ package Interface.connection;
 
 
 import Interface.secretaire.Secretaire;
+import Interface.profil.Profil;
 import interfaceUser.Sql_handler;
 import interfaceUser.encrypteur;
 import interfaceUser.hub_medecin_et_observateur;
@@ -16,15 +17,29 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+
 
 
 public class Connection extends Application {
 
     Sql_handler moteur;
     AnchorPane header = new AnchorPane();
+    private Profil profil;
 
+    Connection connexion;
 
     public Connection(){
+        profil= new Profil();
+        moteur = new Sql_handler();
+    }
+
+
+    public Connection(Connection connection){
+        this.connexion = connection;
+        profil= new Profil();
         moteur = new Sql_handler();
     }
 
@@ -135,6 +150,7 @@ public class Connection extends Application {
                 String mdp = code.securiserFacilement(temps);
 
 
+
                 int temp = moteur.connection(user, mdp);
                 switch (temp) {
                     case (0):
@@ -142,8 +158,10 @@ public class Connection extends Application {
                         break;
                     case (1):
                         primaryStage.close();
-                        Secretaire secretaire = new Secretaire();
+                        Secretaire secretaire = new Secretaire(connexion);
+                        secretaire.mettreAJourUtilisateur(user);
                         secretaire.start(primaryStage);
+
                         break;
                     case (2):
                         new hub_medecin_et_observateur(false, user).setVisible(true);

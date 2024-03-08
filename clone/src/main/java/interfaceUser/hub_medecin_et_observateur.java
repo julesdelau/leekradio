@@ -4,7 +4,9 @@
  */
 package interfaceUser;
 
+
 import java.util.Vector;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 
@@ -404,6 +406,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         //zoom avant
+    
+      
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void envoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envoyerActionPerformed
@@ -463,6 +467,10 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         //rota -90°
+          
+       
+      Icon ATraiter= picture.getIcon();
+  
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -479,6 +487,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
        ImageIcon photo= s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+       
         picture.setIcon(photo);
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = donnePatientATraiter.elementAt(select * nbComposantes);

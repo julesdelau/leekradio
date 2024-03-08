@@ -4,11 +4,10 @@
  */
 package interfaceUser;
 
-
+import java.awt.Graphics;
 import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
 
 /**
  *
@@ -25,8 +24,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private final int nbComposantes = 7;
     private int dossierSelectionne = -1;
     private String idExamCourant;
-    int select;
-    
+    ImageIcon photo;
 
     private Sql_handler s = new Sql_handler();
 
@@ -45,30 +43,28 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         AffichageListes();
 
     }
-    
-   
 
-    public void UpdateList(){
-          affichageATraiter.clear();
-                affichageDejaTraiter.clear();
-                // remplir les données des patients a traiter
-                int i = 0;
-                while (i < donnePatientDejaTraiter.size()) {
-                    affichageDejaTraiter.add(donnePatientDejaTraiter.get(i + 1) + " " + donnePatientDejaTraiter.get(i + 2));
-                    i += nbComposantes;
-                }
-                // remplir les données des patient deja traités
-                i = 0;
-                while (i < donnePatientATraiter.size()) {
-                    affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
-                    i += nbComposantes;
-                }
-                //AffichageListes();
-                this.listeATraiter.updateUI();
-                this.listeDejaTraiter.updateUI();
+    public void UpdateList() {
+        affichageATraiter.clear();
+        affichageDejaTraiter.clear();
+        // remplir les données des patients a traiter
+        int i = 0;
+        while (i < donnePatientDejaTraiter.size()) {
+            affichageDejaTraiter.add(donnePatientDejaTraiter.get(i + 1) + " " + donnePatientDejaTraiter.get(i + 2));
+            i += nbComposantes;
+        }
+        // remplir les données des patient deja traités
+        i = 0;
+        while (i < donnePatientATraiter.size()) {
+            affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
+            i += nbComposantes;
+        }
+        //AffichageListes();
+        this.listeATraiter.updateUI();
+        this.listeDejaTraiter.updateUI();
 
     }
-    
+
     public void AffichageListes() {
         // voir commen faire pour detruires les anciennes liste d'affichages
         affichageATraiter = new Vector(10);
@@ -406,14 +402,13 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         //zoom avant
-    
-      
+
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void envoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envoyerActionPerformed
         // ajouter utiliser le flag
         //le boutton envoyer faut prendre l'id de l'image
-       
 
         if (this.is_medecin) {// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
@@ -435,8 +430,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
                 System.out.println("le changement a été fait");
                 UpdateList();
-               
-              
+
             }
 
         } else {
@@ -448,13 +442,11 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void chercheurradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chercheurradioActionPerformed
         // TODO add your handling code here:
         //le boutton chercher radio sur PACS
-       
-    
-                new imageselecteur(name,idExamCourant).setVisible(true);
-                this.dispose();
-       
-    
-        
+
+        new imageselecteur(name, idExamCourant).setVisible(true);
+        this.dispose();
+
+
     }//GEN-LAST:event_chercheurradioActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -467,10 +459,12 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         //rota -90°
-          
-       
-      Icon ATraiter= picture.getIcon();
-  
+
+       Graphics mongraph =photo.getImage().getGraphics();
+       mongraph.drawLine(0, 100, 0, 100);
+    
+
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -486,23 +480,23 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
-       ImageIcon photo= s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
-       
+        photo = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+
         picture.setIcon(photo);
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = donnePatientATraiter.elementAt(select * nbComposantes);
         dossierSelectionne = select;
-        
+
 
     }//GEN-LAST:event_listeATraiterValueChanged
 
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
-         select = listeDejaTraiter.getSelectedIndex();
-        ImageIcon photo= s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
-       int pictureheight= photo.getIconHeight();
-       int pictureWidth = photo.getIconWidth();
-       picture.setBounds(picture.getX(), picture.getY(), pictureWidth , pictureheight);
+        int select = listeDejaTraiter.getSelectedIndex();
+        photo = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+        int pictureheight = photo.getIconHeight();
+        int pictureWidth = photo.getIconWidth();
+        picture.setBounds(picture.getX(), picture.getY(), pictureWidth, pictureheight);
         picture.setIcon(photo);
         compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = "dejatraite";

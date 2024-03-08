@@ -5,23 +5,14 @@
 package interfaceUser;
 
 import java.awt.Image;
-import java.awt.List;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -29,7 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import oracle.sql.BLOB;
 
 /**
  *
@@ -76,7 +66,6 @@ public class Sql_handler {
         // Si la connection est établie, tester une requête simple 
         // Note : cette requête ne nécessite pas de BD (elle utilise la table "dual")
         if (connection != null) {
-            System.out.println("Connexion établie.");
 
         } else {
             // La connexion n'a pas pu être établie (la référence vaut null)
@@ -88,7 +77,7 @@ public class Sql_handler {
         try {
             // ne marche pas
             connection.close();
-            System.out.println("connection fermée");
+
         } catch (SQLException ex) {
             Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -200,7 +189,7 @@ public class Sql_handler {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("fait");
+
             quit();
             return true;
 
@@ -225,7 +214,7 @@ public class Sql_handler {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("fait");
+
             quit();
 
         } catch (SQLException e) {
@@ -250,7 +239,7 @@ public class Sql_handler {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("fait");
+
             quit();
 
         } catch (SQLException e) {
@@ -266,7 +255,6 @@ public class Sql_handler {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("fait");
 
             quit();
 
@@ -302,13 +290,14 @@ public class Sql_handler {
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
+
             while (rs.next()) {
                 ArrayList<byte[]> value = new ArrayList();
                 value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
-                
+
                 valueMap.put(rs.getString(1), value);
             }
-            System.out.println("fait");
+
             return valueMap;
         } catch (SQLException ex) {
             Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
@@ -322,14 +311,32 @@ public class Sql_handler {
         Image image;
         try {
             InputStream in = new ByteArrayInputStream(bytes);
-           // System.out.println(in.available());
+
             image = ImageIO.read(in);
-            ImageIcon im = new ImageIcon(image);          
+            ImageIcon im = new ImageIcon(image);
             quit();
             return im;
         } catch (IOException ex) {
             Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
             return null;
+        }
+
+    }
+
+    public void AddImages(String idExam, String idphoto) {// a finir
+
+        String sql = "UPDATE DMRTEST "
+                + "SET IDPHOTO ='" + idphoto + "' "// rajouter apres get id photo si on veut pl photo
+                + "WHERE IDMR ='" + idExam + "' ";
+        try {
+            SeConnecter();
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            quit();
+        } catch (SQLException e) {
+            System.out.println("probleme icui");
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
         }
 
     }
@@ -348,7 +355,7 @@ public class Sql_handler {
             Image image;
             try {
                 image = ImageIO.read(in);
-                System.out.println(image.getGraphics().getFontMetrics().getHeight());
+
                 ImageIcon im = new ImageIcon(image);
                 im.getImage();
                 quit();

@@ -5,7 +5,7 @@
 package interfaceUser;
 
 import java.util.Vector;
-import javax.swing.Icon;
+
 
 /**
  *
@@ -21,9 +21,11 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private Vector<String> donnePatientDejaTraiter;
     private final int nbComposantes = 7;
     private int dossierSelectionne = -1;
-    private String idDmrCourante;
+    private String idExamCourant;
+    int select;
+    
 
-    Sql_handler s = new Sql_handler();
+    private Sql_handler s = new Sql_handler();
 
     /**
      * Creates new form hub_medecin_et_observateur
@@ -40,6 +42,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         AffichageListes();
 
     }
+    
+   
 
     public void UpdateList(){
           affichageATraiter.clear();
@@ -110,7 +114,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        chercheurradio = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         envoyer = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -217,10 +221,10 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
         jLabel5.setText("rotation");
 
-        jButton2.setText("chercher radio sur PACS");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        chercheurradio.setText("chercher radio sur PACS");
+        chercheurradio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                chercheurradioActionPerformed(evt);
             }
         });
 
@@ -250,7 +254,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(chercheurradio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(envoyer)
@@ -287,7 +291,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                     .addComponent(jButton3)
                     .addComponent(jButton4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(chercheurradio, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(53, 53, 53)
                 .addComponent(envoyer)
                 .addGap(32, 32, 32))
@@ -402,20 +406,20 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
     private void envoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envoyerActionPerformed
         // ajouter utiliser le flag
-        //le boutton envoyer faut creer fichier xml
-        Icon image = picture.getIcon();
+        //le boutton envoyer faut prendre l'id de l'image
+       
 
         if (this.is_medecin) {// on check le niveea ud'autorisation
             // is_medecin = true , cest un medecin , on le stocke dans la base de données avec un flag complet //
-            if (idDmrCourante.contains("dejatraite")) {
+            if (idExamCourant.contains("dejatraite")) {
                 // patient deja traité donc on ne fait rien
                 System.out.println("le dossier est deja complet");
             } else {
                 // faut absolument un iddmr en clés simple
                 System.out.println("completont le dossier");
-                s.SubmitCR(compteRendu.getText(), idDmrCourante);
+                s.SubmitCR(compteRendu.getText(), idExamCourant);
                 // on test puis on utilise cela qui vas faire chier pr less tests
-                s.ChangerFlag(idDmrCourante);
+                s.ChangerFlag(idExamCourant);
                 donnePatientATraiter.set(dossierSelectionne * nbComposantes + 6, compteRendu.getText());
                 // comme un medic l'a submit on deplace sont contenus dans l'autre liste+ on change le flag
                 for (int i = 0; i < nbComposantes; i++) {
@@ -435,10 +439,17 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_envoyerActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void chercheurradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chercheurradioActionPerformed
         // TODO add your handling code here:
         //le boutton chercher radio sur PACS
-    }//GEN-LAST:event_jButton2ActionPerformed
+       
+    
+                new imageselecteur(name,idExamCourant).setVisible(true);
+                this.dispose();
+       
+    
+        
+    }//GEN-LAST:event_chercheurradioActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
@@ -467,7 +478,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         int select = listeATraiter.getSelectedIndex();
         picture.setText(donnePatientATraiter.elementAt(select * nbComposantes + 5));
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
-        idDmrCourante = donnePatientATraiter.elementAt(select * nbComposantes);
+        idExamCourant = donnePatientATraiter.elementAt(select * nbComposantes);
         dossierSelectionne = select;
         
 
@@ -475,10 +486,10 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
-        int select = listeDejaTraiter.getSelectedIndex();
+         select = listeDejaTraiter.getSelectedIndex();
         picture.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 5));
         compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
-        idDmrCourante = "dejatraite";
+        idExamCourant = "dejatraite";
 
 
     }//GEN-LAST:event_listeDejaTraiterValueChanged
@@ -488,10 +499,10 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton chercheurradio;
     private java.awt.TextArea compteRendu;
     private javax.swing.JButton envoyer;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

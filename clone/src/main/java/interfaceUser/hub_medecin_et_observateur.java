@@ -5,6 +5,7 @@
 package interfaceUser;
 
 import java.util.Vector;
+import javax.swing.ImageIcon;
 
 
 /**
@@ -476,7 +477,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
-        picture.setText(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+       ImageIcon photo= s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+        picture.setIcon(photo);
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = donnePatientATraiter.elementAt(select * nbComposantes);
         dossierSelectionne = select;
@@ -487,7 +489,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
          select = listeDejaTraiter.getSelectedIndex();
-        picture.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 5));
+        ImageIcon photo= s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+        picture.setIcon(photo);
         compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = "dejatraite";
 

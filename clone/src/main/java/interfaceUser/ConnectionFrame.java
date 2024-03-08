@@ -13,6 +13,8 @@ import interfaceUser.hub_medecin_et_observateur;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -36,7 +38,8 @@ public class ConnectionFrame extends javax.swing.JFrame {
         try {
             img = ImageIO.read(new File("ressources\\logopiti.png"));
             ImageIcon image = new ImageIcon(img);
-           
+            
+          
            picture.setIcon(image);
                 
              System.out.println("reussi");

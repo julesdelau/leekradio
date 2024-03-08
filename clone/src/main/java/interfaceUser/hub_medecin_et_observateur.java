@@ -469,6 +469,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
         idDmrCourante = donnePatientATraiter.elementAt(select * nbComposantes);
         dossierSelectionne = select;
+        
 
     }//GEN-LAST:event_listeATraiterValueChanged
 

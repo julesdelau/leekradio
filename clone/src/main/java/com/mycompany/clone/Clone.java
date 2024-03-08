@@ -5,6 +5,9 @@ package com.mycompany.clone;
 
 import interfaceUser.ConnectionFrame;
 import interfaceUser.Sql_handler;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -37,6 +40,12 @@ public class Clone {
         String compterendu = "yapa00000000000000000000000000";
       // h.AddExamen(iddmr, nom, prenom,date , adresse, photo, compterendu,0);
        //h.testTps();
-       //h.getimages();
+       
+        Map<String, ArrayList<byte[]>> valueMap ;
+        valueMap=h.GetAllImages();
+        System.out.println( valueMap.keySet().toArray()[1]);
+       System.out.println(valueMap.get(valueMap.keySet().toArray()[1].toString()).get(0).getClass());
+        h.TransformeImage(valueMap.get(valueMap.keySet().toArray()[0].toString()).get(0));// la secondee image n'est pas un png , pas un type handlable
+       
     }
 }

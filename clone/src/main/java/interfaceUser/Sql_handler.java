@@ -4,19 +4,31 @@
  */
 package interfaceUser;
 
+import java.awt.Image;
+import java.awt.List;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import oracle.sql.BLOB;
 
 /**
@@ -72,20 +84,16 @@ public class Sql_handler {
         }
     }
 
-    public void quit() {// ne marche pas
-        String sql = "QUIT";
+    public void quit() {
         try {
-            st = connection.createStatement();
-            rs = st.executeQuery(sql);
-
+            // ne marche pas
+            connection.close();
+            System.out.println("connection fermée");
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.out.println("erreur de quit");
-
+            Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-   
 
     public int connection(String user, String mdp) {
         SeConnecter();
@@ -106,12 +114,12 @@ public class Sql_handler {
 
     }
 
-    public String createdate(int year, int month, int day,int hour , int minutes) {
+    public String createdate(int year, int month, int day, int hour, int minutes) {
         if (day > 31 || month > 12) {
             return "01/01/1990 ";
 
         }
-        String sortie = "" + day + "/" + month + "/" + year +" "+hour+":"+minutes;
+        String sortie = "" + day + "/" + month + "/" + year + " " + hour + ":" + minutes;
         return sortie;
     }
 
@@ -171,7 +179,7 @@ public class Sql_handler {
     public boolean AddExamen(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu, int dejatraite) {
         SeConnecter();
         try {
-            String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , "+ " TO_DATE('" + date + "' , 'DD/MM/YYYY HH24:MI')" + " , '" + adresse + "' , '" + photo + "' , '" + compterendu + "' , '" + dejatraite + "')";
+            String sql = "INSERT INTO DMRTEST values( '" + iddmr + "' , '" + nom + "' , '" + prenom + "' , " + " TO_DATE('" + date + "' , 'DD/MM/YYYY HH24:MI')" + " , '" + adresse + "' , '" + photo + "' , '" + compterendu + "' , '" + dejatraite + "')";
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             quit();
@@ -252,8 +260,6 @@ public class Sql_handler {
         }
     }
 
-   
-
     public void drop(String table) {
         SeConnecter();
         String sql = "DROP TABLE " + table;
@@ -271,46 +277,92 @@ public class Sql_handler {
         }
     }
 
-    public void getimages() {
+    public void InsertPictureAsBlob(String id, String path) {
+        String INSERT_PICTURE = "INSERT INTO imagetest(id_image, im) VALUES (?, ?)";
+        try {
+            connection.setAutoCommit(false);
+            File file = new File(path);
+            try (FileInputStream fis = new FileInputStream(file); PreparedStatement ps = connection.prepareStatement(INSERT_PICTURE)) {
+                ps.setString(1, id);
+                ps.setBinaryStream(2, fis, (int) file.length());
+                ps.executeUpdate();
+                connection.commit();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Map<String, ArrayList<byte[]>> GetAllImages() {
+        Map<String, ArrayList<byte[]>> valueMap = new HashMap<>();
         SeConnecter();
-        String sql = "SELECT * FROM imagetest";
+        String sql = "SELECT * FROM imagetest ";
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            System.out.println("fait");
-            rs.next();
-
-            for (int j = 0; j < rs.getRow(); j++) {//premiere colonne id image , secobde image
-                // System.out.println(rs.getString(1));
-
-                Blob monimage = rs.getBlob(2);
-
-                
-                BufferedImage image;
-                try {
-                    int blobLength = (int) monimage.length();
-                byte[] blobAsBytes = monimage.getBytes(1, blobLength);
-                System.out.println("Length" + blobLength);
-
-                System.out.println("testlen" + blobAsBytes.length);
-
-                    image = ImageIO.read(new ByteArrayInputStream(blobAsBytes));
-                    
-                    rs.next();
-                } catch (IOException ex) {
-                    Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
+            while (rs.next()) {
+                ArrayList<byte[]> value = new ArrayList();
+                value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
+                valueMap.put(rs.getString(1), value);
             }
+            System.out.println("fait");
+            return valueMap;
+        } catch (SQLException ex) {
+            Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
 
-            // quit();
+    }
+
+    public ImageIcon TransformeImage(byte[] bytes) {
+
+        Image image;
+        try {
+            InputStream in = new ByteArrayInputStream(bytes);
+           // System.out.println(in.available());
+            image = ImageIO.read(in);
+            //System.out.println(image.getGraphics().getFontMetrics().getHeight());
+            ImageIcon im = new ImageIcon(image);
+            im.getImage();
+            quit();
+            return im;
+        } catch (IOException ex) {
+            Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+    }
+
+    public ImageIcon getimages(String idImage) {
+        SeConnecter();
+        String sql = "SELECT * FROM imagetest where id_image='" + idImage + "'";
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(sql);
+            rs.next();
+            // Créer un flux d'entrée à partir du tableau d'octets
+            Blob blob = rs.getBlob(2);
+            byte[] bytes = blob.getBytes(1, (int) blob.length());
+            InputStream in = new ByteArrayInputStream(bytes);
+            Image image;
+            try {
+                image = ImageIO.read(in);
+                System.out.println(image.getGraphics().getFontMetrics().getHeight());
+                ImageIcon im = new ImageIcon(image);
+                im.getImage();
+                quit();
+                return im;
+            } catch (IOException ex) {
+                Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
-
+            return null;
         }
-
-        //test d'un parser
     }
 }
 // table identite(id,mdp,specialite,nom , prenom)id des medic secret et manip
@@ -320,3 +372,4 @@ public class Sql_handler {
 // table pacs -> idphoto , photo format icon
 //crrer la methode quit
 // copier le constru pr crrer methode connect et ajouter connet et quit das chaque methoide
+

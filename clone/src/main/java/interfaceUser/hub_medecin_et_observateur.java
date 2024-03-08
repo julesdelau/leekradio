@@ -125,6 +125,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         picture = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1000, 600));
 
         listeATraiter.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -490,6 +491,9 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         // TODO add your handling code here:
          select = listeDejaTraiter.getSelectedIndex();
         ImageIcon photo= s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+       int pictureheight= photo.getIconHeight();
+       int pictureWidth = photo.getIconWidth();
+       picture.setBounds(picture.getX(), picture.getY(), pictureWidth , pictureheight);
         picture.setIcon(photo);
         compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = "dejatraite";

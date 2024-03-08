@@ -305,6 +305,7 @@ public class Sql_handler {
             while (rs.next()) {
                 ArrayList<byte[]> value = new ArrayList();
                 value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
+                
                 valueMap.put(rs.getString(1), value);
             }
             System.out.println("fait");
@@ -323,9 +324,7 @@ public class Sql_handler {
             InputStream in = new ByteArrayInputStream(bytes);
            // System.out.println(in.available());
             image = ImageIO.read(in);
-            //System.out.println(image.getGraphics().getFontMetrics().getHeight());
-            ImageIcon im = new ImageIcon(image);
-            im.getImage();
+            ImageIcon im = new ImageIcon(image);          
             quit();
             return im;
         } catch (IOException ex) {

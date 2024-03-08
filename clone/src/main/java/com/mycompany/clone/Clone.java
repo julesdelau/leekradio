@@ -44,8 +44,8 @@ public class Clone {
         Map<String, ArrayList<byte[]>> valueMap ;
         valueMap=h.GetAllImages();
         System.out.println( valueMap.keySet().toArray()[1]);
-       System.out.println(valueMap.get(valueMap.keySet().toArray()[1].toString()).get(0).getClass());
-        h.TransformeImage(valueMap.get(valueMap.keySet().toArray()[0].toString()).get(0));// la secondee image n'est pas un png , pas un type handlable
+       //System.out.println(valueMap.get(valueMap.keySet().toArray()[1].toString()).get(0).getClass());
+        h.TransformeImage(valueMap.get(valueMap.keySet().toArray()[1].toString()).get(0));// la secondee image n'est pas un png , pas un type handlable
        
     }
 }

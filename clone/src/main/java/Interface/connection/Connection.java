@@ -146,8 +146,7 @@ public class Connection extends Application {
             public void handle(ActionEvent event) {
                 encrypteur code = new encrypteur();
                 String user = nomUtilisateurField.getText().trim();
-                String temps = String.valueOf(motDePasseField.getText());
-                String mdp = code.securiserFacilement(temps);
+                String mdp = code.securiserFacilement( String.valueOf(motDePasseField.getText()));
 
 
 

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -135,6 +136,7 @@ public class Sql_handler {
         SeConnecter();
         int traitement;
         Vector<String> sortie = new Vector<String>();
+
         String sql = "SELECT * FROM DMRTEST ";
         try {
             if (istreated) {
@@ -150,7 +152,7 @@ public class Sql_handler {
                 if (rs.getInt(rs.getMetaData().getColumnLabel(rs.getMetaData().getColumnCount())) == traitement) {
                     for (int j = 1; j < rs.getMetaData().getColumnCount(); j++) {// on cemmence ne 1 et fini en nb colonnes +1
 
-                        sortie.add(rs.getString(rs.getMetaData().getColumnLabel(j)));
+                        sortie.add(rs.getString(rs.getMetaData().getColumnLabel(j)));// foutre ce truc dans une map apres
                     }
                 }
                 rs.next();
@@ -292,32 +294,17 @@ public class Sql_handler {
             rs = st.executeQuery(sql);
 
             while (rs.next()) {
-                //todo , quand la colonnes appartenance sera faite mettre un tant que l'item a la meme appartenance que l'item precedant , on le met dans la liste de photo ouverte , sinon on rentre la liste de photo et on rouvre une autre
-                //chope le flag d'appartenance de l'element courant 
-                //si le flag d'appartenance et differenc que celui du precedent alors on met toutes les valeurs trouvees a present dans la map et ou rouvre une liste
-                // sinon on met le blob dans la liste deja la
-                /*
-                ex
-               while(rs.nxt()){
-                    if(valueMap.get(id scan elm courant)!=null){
-                         valueMap.get(idscan elm courant).add(le blob)
-                    }
-                
-                        ArrayList<byte[]> value = new ArrayList();
-                         value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
-                        valueMap.put(rs.getString(3), value);// la troisieme colonne et l'id du scan
-                     }
-                }
-                */
-                ArrayList<byte[]> value = new ArrayList();
-                
-                value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
 
-                valueMap.put(rs.getString(1), value);
-                
-                
+                if (valueMap.get(rs.getString(3)) != null) {
+                    valueMap.get(rs.getString(3)).add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
+                } else {
+                    ArrayList<byte[]> value = new ArrayList();
+                    value.add(rs.getDate(4).toLocalDate().toString().getBytes());// on ajoute la date
+                    value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
+                    valueMap.put(rs.getString(3), value);// la troisieme colonne et l'id du scan
+                }
             }
-            
+
             return valueMap;
         } catch (SQLException ex) {
             Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
@@ -343,10 +330,10 @@ public class Sql_handler {
 
     }
 
-    public void AddImages(String idExam, String idphoto) {// a finir
+    public void AddImages(String idExam, String idRadio) {// ce ne sera plus idphoto mais id radio
 
         String sql = "UPDATE DMRTEST "
-                + "SET IDPHOTO ='" + idphoto + "' "// rajouter apres get id photo si on veut pl photo
+                + "SET IDPHOTO ='" + idRadio + "' "// rajouter apres get id photo si on veut pl photo
                 + "WHERE IDMR ='" + idExam + "' ";
         try {
             SeConnecter();
@@ -361,34 +348,56 @@ public class Sql_handler {
 
     }
 
-    public ImageIcon getimages(String idImage) {
+    public ArrayList<Blob> getimages(String idRadio) {
         SeConnecter();
-        String sql = "SELECT * FROM imagetest where id_image='" + idImage + "'";
+        String sql = "SELECT * FROM imagetest where  Groupe='"+idRadio+"'";
+        ArrayList<Blob> sortie= new ArrayList();
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            rs.next();
-            // Créer un flux d'entrée à partir du tableau d'octets
-            Blob blob = rs.getBlob(2);
-            byte[] bytes = blob.getBytes(1, (int) blob.length());
-            InputStream in = new ByteArrayInputStream(bytes);
-            Image image;
-            try {
-                image = ImageIO.read(in);
-
-                ImageIcon im = new ImageIcon(image);
-                im.getImage();
-                quit();
-                return im;
-            } catch (IOException ex) {
-                Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
+            while(rs.next()){
+                sortie.add(rs.getBlob(2));
             }
+            return sortie;
+            // Créer un flux d'entrée à partir du tableau d'octets
+           /*
+           
+            */
+            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
             return null;
         }
+    }
+    
+    
+    
+    public ImageIcon getimage(Blob blob) {
+         
+             
+            try {
+                
+                
+                byte[] bytes = blob.getBytes(1, (int) blob.length());
+                InputStream in = new ByteArrayInputStream(bytes);
+                Image image;
+                try {
+                    image = ImageIO.read(in);
+                    
+                    ImageIcon im = new ImageIcon(image);
+                    im.getImage();
+                    quit();
+                    return im;
+                } catch (IOException ex) {
+                    Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
+                    return null;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+            
     }
 }
 // table identite(id,mdp,specialite,nom , prenom)id des medic secret et manip

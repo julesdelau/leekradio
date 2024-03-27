@@ -5,6 +5,8 @@
 package interfaceUser;
 
 import java.awt.Graphics;
+import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -24,7 +26,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private final int nbComposantes = 7;
     private int dossierSelectionne = -1;
     private String idExamCourant;
-    ImageIcon photo;
+    ArrayList<Blob> listePhoto;// a finir
 
     private Sql_handler s = new Sql_handler();
 
@@ -460,8 +462,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         // TODO add your handling code here:
         //rota -90°
 
-       Graphics mongraph =photo.getImage().getGraphics();
-       mongraph.drawLine(0, 100, 0, 100);
+    
     
 
 
@@ -480,9 +481,23 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
-        photo = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
-
-        picture.setIcon(photo);
+        listePhoto = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+        ImageIcon Photo=s.getimage(listePhoto.get(0));// a modif
+        
+        
+        
+        
+        
+        // implementer l'ilmage que l'on veut choisir
+        
+        
+        
+        
+        
+        
+        
+        
+        picture.setIcon(Photo);
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = donnePatientATraiter.elementAt(select * nbComposantes);
         dossierSelectionne = select;
@@ -493,11 +508,26 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
         int select = listeDejaTraiter.getSelectedIndex();
-        photo = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
-        int pictureheight = photo.getIconHeight();
-        int pictureWidth = photo.getIconWidth();
-        picture.setBounds(picture.getX(), picture.getY(), pictureWidth, pictureheight);
-        picture.setIcon(photo);
+        listePhoto = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+     
+        
+        picture.setIcon(s.getimage(listePhoto.get(0)));
+        
+        
+        
+        
+        
+        //implementer l'image que l'on veut choisir
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = "dejatraite";
 

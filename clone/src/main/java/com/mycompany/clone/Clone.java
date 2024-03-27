@@ -27,25 +27,11 @@ public class Clone {
         
         //test remplissage table
         Sql_handler h = new Sql_handler();
-       // h.drop("DMRTEST");
-       // h.CreateTable();
-        int iddmr = 213;
-        
-        String nom = "jeannnnnnnnnnne";
-        String prenom = "neymmmmmmarette";
-        String date =h.createdate(2005, 5, 24,20,20);
-        
-        String adresse = "24 grand trou";
-        String photo = "1";
-        String compterendu = "yapa00000000000000000000000000";
-      // h.AddExamen(iddmr, nom, prenom,date , adresse, photo, compterendu,0);
-       //h.testTps();
+       
        
         Map<String, ArrayList<byte[]>> valueMap ;
         valueMap=h.GetAllImages();
-        System.out.println( valueMap.keySet().toArray()[1]);
-       //System.out.println(valueMap.get(valueMap.keySet().toArray()[1].toString()).get(0).getClass());
-        h.TransformeImage(valueMap.get(valueMap.keySet().toArray()[1].toString()).get(0));// la secondee image n'est pas un png , pas un type handlable
-       
+   
+     
     }
 }

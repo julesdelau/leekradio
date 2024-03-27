@@ -23,6 +23,11 @@ public class imageselecteur extends javax.swing.JFrame {
  String user;
  String idPatient;
  String key;
+ 
+ int y=0;
+ int seuil=2;// en pixel
+int imageselecteur=0;
+         
     /**
      * Creates new form imageselecteur
      */
@@ -56,6 +61,12 @@ public class imageselecteur extends javax.swing.JFrame {
         select = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        photopreview.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                photopreviewMouseDragged(evt);
+            }
+        });
 
         listdatephoto.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -122,6 +133,29 @@ public class imageselecteur extends javax.swing.JFrame {
         photopreview.setIcon(image);
         
     }//GEN-LAST:event_listdatephotoValueChanged
+
+    private void photopreviewMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_photopreviewMouseDragged
+       int temp=y-evt.getYOnScreen();
+       if(temp>seuil || temp < -seuil){
+           if(temp<0 & imageselecteur>0){
+               imageselecteur--;
+               System.out.println("on descent et c'est possible");
+               
+           }else{
+               if(temp>0 & imageselecteur<valueMap.get(key).size()){
+                   imageselecteur++;
+                   System.out.println("on monte et c'est possible");
+               }
+           }
+           // on monte ou descent dans les images selon le signe de temp
+       }
+       
+        
+        // TODO add your handling code here:
+        System.out.println("j'ai cliqué / deplace la souri");
+        
+        y=evt.getYOnScreen();
+    }//GEN-LAST:event_photopreviewMouseDragged
 
     
    

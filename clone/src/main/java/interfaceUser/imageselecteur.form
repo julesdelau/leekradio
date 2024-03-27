@@ -54,6 +54,9 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JLabel" name="photopreview">
+      <Events>
+        <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="photopreviewMouseDragged"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>

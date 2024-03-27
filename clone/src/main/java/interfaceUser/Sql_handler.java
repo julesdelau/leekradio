@@ -292,12 +292,32 @@ public class Sql_handler {
             rs = st.executeQuery(sql);
 
             while (rs.next()) {
+                //todo , quand la colonnes appartenance sera faite mettre un tant que l'item a la meme appartenance que l'item precedant , on le met dans la liste de photo ouverte , sinon on rentre la liste de photo et on rouvre une autre
+                //chope le flag d'appartenance de l'element courant 
+                //si le flag d'appartenance et differenc que celui du precedent alors on met toutes les valeurs trouvees a present dans la map et ou rouvre une liste
+                // sinon on met le blob dans la liste deja la
+                /*
+                ex
+               while(rs.nxt()){
+                    if(valueMap.get(id scan elm courant)!=null){
+                         valueMap.get(idscan elm courant).add(le blob)
+                    }
+                
+                        ArrayList<byte[]> value = new ArrayList();
+                         value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
+                        valueMap.put(rs.getString(3), value);// la troisieme colonne et l'id du scan
+                     }
+                }
+                */
                 ArrayList<byte[]> value = new ArrayList();
+                
                 value.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
 
                 valueMap.put(rs.getString(1), value);
+                
+                
             }
-
+            
             return valueMap;
         } catch (SQLException ex) {
             Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);

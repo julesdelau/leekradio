@@ -419,7 +419,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                 System.out.println("completont le dossier");
                 s.SubmitCR(compteRendu.getText(), idExamCourant);
                 // on test puis on utilise cela qui vas faire chier pr less tests
-                //s.ChangerFlag(idExamCourant);
+                s.ChangerFlag(idExamCourant);
                 
                 
                 
@@ -430,6 +430,7 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                 InfoPatientATraiter.replace(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString(), remplacement);
                 InfoPatientDejaTraiter.put(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString(), InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString()));
                 InfoPatientATraiter.remove(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString());
+
                 AffichageListes(true);
 
             }

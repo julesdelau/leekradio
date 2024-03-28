@@ -132,10 +132,14 @@ public class Sql_handler {
 
     }
 
-    public Vector<String> ListeExaments(boolean istreated) {
+    public Map<String, ArrayList<String>> ListeExaments(boolean istreated) {
         SeConnecter();
         int traitement;
-        Vector<String> sortie = new Vector<String>();
+        
+        Map<String, ArrayList<String>> sortie = new HashMap<>();
+        // essai avec une map
+
+       // Vector<String> sortie = new Vector<String>();
 
         String sql = "SELECT * FROM DMRTEST ";
         try {
@@ -146,6 +150,31 @@ public class Sql_handler {
             }
             st = connection.createStatement();
             rs = st.executeQuery(sql);
+            while (rs.next()) {
+                // on verifie si le patient a une radion en cour
+                if (rs.getInt(rs.getMetaData().getColumnLabel(rs.getMetaData().getColumnCount())) == traitement) {
+                    
+                    // on verifie si le patient est deja ou non dans notre strucutre de données
+                    if (sortie.get(rs.getString(1)) == null) {
+                        //si non on l'ajoute
+                        ArrayList<String> infoPatient = new ArrayList();
+                        int j = 1;
+                        while (j < rs.getMetaData().getColumnCount()) {
+                            
+                                infoPatient.add(rs.getString(rs.getMetaData().getColumnLabel(j)));
+                            
+                            j++;
+                        }
+                        sortie.put(rs.getString(1), infoPatient);
+
+                    }
+                }
+            }
+            
+            /*
+            // en attendant
+            rs.beforeFirst();
+
             rs.next();
 
             for (int i = 0; i < rs.getRow(); i++) {
@@ -157,14 +186,16 @@ public class Sql_handler {
                 }
                 rs.next();
             }
-
+*/
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
 
         }
-        // System.out.println(sortie);
+       
         quit();
+        System.out.println(sortie);
         return sortie;
+         
     }
 
     public boolean AddExamen(int iddmr, String nom, String prenom, String date, String adresse, String photo, String compterendu, int dejatraite) {
@@ -350,59 +381,31 @@ public class Sql_handler {
 
     public ArrayList<byte[]> getRadio(String idRadio) {
         SeConnecter();
-        String sql = "SELECT * FROM imagetest where  Groupe='"+idRadio+"'";
-        ArrayList<byte[]> sortie= new ArrayList();
+        String sql = "SELECT * FROM imagetest where  Groupe='" + idRadio + "'";
+        ArrayList<byte[]> sortie = new ArrayList();
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
-            while(rs.next()){
-                sortie.add(rs.getBlob(2).getBytes(1, (int)rs.getBlob(2).length()));
+            while (rs.next()) {
+                sortie.add(rs.getBlob(2).getBytes(1, (int) rs.getBlob(2).length()));
             }
             quit();
             return sortie;
             // Créer un flux d'entrée à partir du tableau d'octets
-           /*
+            /*
            
-            */
-            
+             */
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
             return null;
         }
     }
-    
-    
-    
-    public ImageIcon getimage(Blob blob) {
-         
-             
-            try {
-                
-                
-                byte[] bytes = blob.getBytes(1, (int) blob.length());
-                InputStream in = new ByteArrayInputStream(bytes);
-                Image image;
-                try {
-                    image = ImageIO.read(in);
-                    
-                    ImageIcon im = new ImageIcon(image);
-                    im.getImage();
-                    quit();
-                    return im;
-                } catch (IOException ex) {
-                    Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
-                    return null;
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(Sql_handler.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-            
-    }
-}
-// table identite(id,mdp,specialite,nom , prenom)id des medic secret et manip
 
+}
+
+// table identite(id,mdp,specialite,nom , prenom)id des medic secret et manip
 //table finder(iddmr , nom ,prenom, adresse, datenaissnce)
 // soi dmr(iddmr , nom , prenom , datenaissance ,adfesse,urlverpacs ,compte randu)
 // table pacs -> idphoto , photo format icon

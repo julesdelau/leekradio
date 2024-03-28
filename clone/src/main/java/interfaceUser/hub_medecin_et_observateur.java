@@ -4,11 +4,10 @@
  */
 package interfaceUser;
 
-import java.awt.Graphics;
-import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Vector;
-import javax.swing.Icon;
+
 import javax.swing.ImageIcon;
 
 /**
@@ -19,17 +18,18 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
     private boolean is_medecin;
     private final String name;
-    private Vector<String> affichageATraiter;// un test on utilisera des array plutot
-    private Vector<String> affichageDejaTraiter;
-    private Vector<String> donnePatientATraiter;
-    private Vector<String> donnePatientDejaTraiter;
-    private final int nbComposantes = 7;
+    private Vector<String> affichageATraiter = new Vector();
+    private Vector<String> affichageDejaTraiter = new Vector();
+
+    Map<String, ArrayList<String>> InfoPatientDejaTraiter;
+    Map<String, ArrayList<String>> InfoPatientATraiter;
+
     private int dossierSelectionne = -1;
     private String idExamCourant;
-    ArrayList<byte[]> listePhoto;// a finir
-    int imageselecteur=0;
-    int deplacementpixel=0;
-    int y=0;
+    ArrayList<byte[]> listePhoto;
+    int imageselecteur = 0;
+    int deplacementpixel = 0;
+    int y = 0;
 
     private Sql_handler s = new Sql_handler();
 
@@ -43,53 +43,40 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         this.name = name;
         this.is_medecin = is_medecin;
         // a changer le chiffre ds l'initialisation
-        donnePatientATraiter = s.ListeExaments(false);
-        donnePatientDejaTraiter = s.ListeExaments(true);
-        AffichageListes();
+        InfoPatientATraiter = s.ListeExaments(false);
+        InfoPatientDejaTraiter = s.ListeExaments(true);
+        AffichageListes(false);
 
     }
 
-    public void UpdateList() {
-        affichageATraiter.clear();
-        affichageDejaTraiter.clear();
-        // remplir les données des patients a traiter
-        int i = 0;
-        while (i < donnePatientDejaTraiter.size()) {
-            affichageDejaTraiter.add(donnePatientDejaTraiter.get(i + 1) + " " + donnePatientDejaTraiter.get(i + 2));
-            i += nbComposantes;
+    public void AffichageListes(boolean IsItAnUpdate) {
+        if (IsItAnUpdate) {
+            affichageATraiter.clear();
+            affichageDejaTraiter.clear();
         }
-        // remplir les données des patient deja traités
-        i = 0;
-        while (i < donnePatientATraiter.size()) {
-            affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
-            i += nbComposantes;
-        }
-        //AffichageListes();
-        this.listeATraiter.updateUI();
-        this.listeDejaTraiter.updateUI();
 
-    }
-
-    public void AffichageListes() {
         // voir commen faire pour detruires les anciennes liste d'affichages
-        affichageATraiter = new Vector(10);
-        affichageDejaTraiter = new Vector(10);
         // remplir les données des patients a traiter
-        int i = 0;
-        while (i < donnePatientDejaTraiter.size()) {
-            affichageDejaTraiter.add(donnePatientDejaTraiter.get(i + 1) + " " + donnePatientDejaTraiter.get(i + 2));
-            i += nbComposantes;
+        for (int j = 0; j < InfoPatientATraiter.keySet().size(); j++) {
+            String prenom = InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[j].toString()).get(1);
+            String nom = InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[j].toString()).get(2);
+            affichageATraiter.add(prenom + " " + nom);
         }
-        // remplir les données des patient deja traités
-        i = 0;
-        while (i < donnePatientATraiter.size()) {
-            affichageATraiter.add(donnePatientATraiter.get(i + 1) + " " + donnePatientATraiter.get(i + 2));
-            i += nbComposantes;
+        for (int j = 0; j < InfoPatientDejaTraiter.keySet().size(); j++) {
+
+            String prenom = InfoPatientDejaTraiter.get(InfoPatientDejaTraiter.keySet().toArray()[j].toString()).get(1);
+            String nom = InfoPatientDejaTraiter.get(InfoPatientDejaTraiter.keySet().toArray()[j].toString()).get(2);
+            affichageDejaTraiter.add(prenom + " " + nom);
         }
 
-        //
-        listeATraiter.setListData(affichageATraiter);
-        listeDejaTraiter.setListData(affichageDejaTraiter);
+        if (IsItAnUpdate) {
+            this.listeATraiter.updateUI();
+            this.listeDejaTraiter.updateUI();
+        } else {
+            listeATraiter.setListData(affichageATraiter);
+            listeDejaTraiter.setListData(affichageDejaTraiter);
+        }
+
         // utilisr is medecin pour octroyer les droit de faire un enregistrement dur
     }
 
@@ -196,6 +183,8 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
         jLabel4.setText("déja traité");
 
+        jPanel2.setMaximumSize(new java.awt.Dimension(177, 453));
+
         jButton3.setText("↻");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,14 +215,14 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
         jLabel5.setText("rotation");
 
-        chercheurradio.setText("chercher radio sur PACS");
+        chercheurradio.setText("PACS");
         chercheurradio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chercheurradioActionPerformed(evt);
             }
         });
 
-        jButton7.setText("numeriser radio");
+        jButton7.setText("radio");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -256,30 +245,28 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(chercheurradio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
-                        .addComponent(envoyer)
-                        .addGap(0, 52, Short.MAX_VALUE))
+                        .addComponent(envoyer))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4)))
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(6, 6, 6)))
+                        .addGap(44, 44, 44)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton4))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(chercheurradio, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -295,19 +282,19 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chercheurradio, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53)
+                .addGap(54, 54, 54)
                 .addComponent(envoyer)
                 .addGap(32, 32, 32))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                    .addContainerGap(206, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(184, 184, 184)))
         );
 
         jInternalFrame1.setVisible(true);
+
+        compteRendu.setMinimumSize(new java.awt.Dimension(100, 60));
+        compteRendu.setPreferredSize(new java.awt.Dimension(100, 60));
 
         picture.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -321,19 +308,19 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jInternalFrame1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(compteRendu, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
+                .addComponent(compteRendu, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(picture, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(109, 109, 109))
+            .addGroup(jInternalFrame1Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(picture, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(picture, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(picture, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(compteRendu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -374,13 +361,14 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 21, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -427,20 +415,22 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
                 // patient deja traité donc on ne fait rien
                 System.out.println("le dossier est deja complet");
             } else {
-                // faut absolument un iddmr en clés simple
+                // modifion dans la bdd
                 System.out.println("completont le dossier");
                 s.SubmitCR(compteRendu.getText(), idExamCourant);
                 // on test puis on utilise cela qui vas faire chier pr less tests
-                s.ChangerFlag(idExamCourant);
-                donnePatientATraiter.set(dossierSelectionne * nbComposantes + 6, compteRendu.getText());
-                // comme un medic l'a submit on deplace sont contenus dans l'autre liste+ on change le flag
-                for (int i = 0; i < nbComposantes; i++) {
-                    donnePatientDejaTraiter.add(donnePatientATraiter.get(dossierSelectionne * nbComposantes));
-                    donnePatientATraiter.remove(dossierSelectionne * nbComposantes);
-                }
-
-                System.out.println("le changement a été fait");
-                UpdateList();
+                //s.ChangerFlag(idExamCourant);
+                
+                
+                
+                
+                //modifion notre affichage
+                ArrayList<String> remplacement = InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString());
+                remplacement.set(6, compteRendu.getText());
+                InfoPatientATraiter.replace(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString(), remplacement);
+                InfoPatientDejaTraiter.put(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString(), InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString()));
+                InfoPatientATraiter.remove(InfoPatientATraiter.keySet().toArray()[dossierSelectionne].toString());
+                AffichageListes(true);
 
             }
 
@@ -471,9 +461,6 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
         // TODO add your handling code here:
         //rota -90°
 
-    
-    
-
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -490,14 +477,14 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
-        listePhoto = s.getRadio(donnePatientATraiter.elementAt(select * nbComposantes + 5));
-        
-        ImageIcon Photo=s.TransformeImage(listePhoto.get(0));
-                
-        
+        listePhoto = s.getRadio(InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[select].toString()).get(5));
+
+        ImageIcon Photo = s.TransformeImage(listePhoto.get(0));
+
         picture.setIcon(Photo);
-        compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
-        idExamCourant = donnePatientATraiter.elementAt(select * nbComposantes);
+        compteRendu.setText(InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[select].toString()).get(6));
+        idExamCourant = InfoPatientATraiter.get(InfoPatientATraiter.keySet().toArray()[select].toString()).get(0);
+
         dossierSelectionne = select;
 
 
@@ -506,11 +493,10 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
         int select = listeDejaTraiter.getSelectedIndex();
-        listePhoto = s.getRadio(donnePatientATraiter.elementAt(select * nbComposantes + 5));
-     
-        
+        listePhoto = s.getRadio(InfoPatientDejaTraiter.get(InfoPatientDejaTraiter.keySet().toArray()[select].toString()).get(5));
+
         picture.setIcon(s.TransformeImage(listePhoto.get(0)));
-        compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
+        compteRendu.setText(InfoPatientDejaTraiter.get(InfoPatientDejaTraiter.keySet().toArray()[select].toString()).get(6));
         idExamCourant = "dejatraite";
 
 
@@ -518,22 +504,21 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
     private void pictureMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pictureMouseDragged
         // TODO add your handling code here:
-        
-         deplacementpixel=y-evt.getYOnScreen();
-      
-           if(deplacementpixel<-0.5 & imageselecteur>0){
-               imageselecteur--;
-            
-               
-           }else{
-              
-               if(deplacementpixel>0.5 & imageselecteur<listePhoto.size()-1){
-                   imageselecteur++;
-                
-               }
-           }
+
+        deplacementpixel = y - evt.getYOnScreen();
+
+        if (deplacementpixel < -0.5 & imageselecteur > 0) {
+            imageselecteur--;
+
+        } else {
+
+            if (deplacementpixel > 0.5 & imageselecteur < listePhoto.size() - 1) {
+                imageselecteur++;
+
+            }
+        }
         picture.setIcon(s.TransformeImage(listePhoto.get(imageselecteur)));
-        y=evt.getYOnScreen();
+        y = evt.getYOnScreen();
     }//GEN-LAST:event_pictureMouseDragged
 
     /**

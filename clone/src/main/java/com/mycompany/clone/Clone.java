@@ -25,7 +25,8 @@ public class Clone {
             }
         });
         
-     
+     Sql_handler h = new Sql_handler();
+     h.ListeExaments(true);
      
     }
 }

@@ -6,15 +6,9 @@
 package interfaceUser;
 
 import javax.swing.*;
-import java.awt.event.*;
-import interfaceUser.Sql_handler;
-import interfaceUser.hub_medecin_et_observateur;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;

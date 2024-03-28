@@ -5,18 +5,15 @@
 package interfaceUser;
 
 import java.awt.Image;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -170,23 +167,7 @@ public class Sql_handler {
                     }
                 }
             }
-            
-            /*
-            // en attendant
-            rs.beforeFirst();
 
-            rs.next();
-
-            for (int i = 0; i < rs.getRow(); i++) {
-                if (rs.getInt(rs.getMetaData().getColumnLabel(rs.getMetaData().getColumnCount())) == traitement) {
-                    for (int j = 1; j < rs.getMetaData().getColumnCount(); j++) {// on cemmence ne 1 et fini en nb colonnes +1
-
-                        sortie.add(rs.getString(rs.getMetaData().getColumnLabel(j)));// foutre ce truc dans une map apres
-                    }
-                }
-                rs.next();
-            }
-*/
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
 

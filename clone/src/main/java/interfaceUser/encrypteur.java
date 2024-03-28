@@ -11,10 +11,7 @@ package interfaceUser;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class encrypteur {
     public encrypteur(){}

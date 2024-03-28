@@ -26,7 +26,10 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private final int nbComposantes = 7;
     private int dossierSelectionne = -1;
     private String idExamCourant;
-    ArrayList<Blob> listePhoto;// a finir
+    ArrayList<byte[]> listePhoto;// a finir
+    int imageselecteur=0;
+    int deplacementpixel=0;
+    int y=0;
 
     private Sql_handler s = new Sql_handler();
 
@@ -306,6 +309,12 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
 
         jInternalFrame1.setVisible(true);
 
+        picture.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                pictureMouseDragged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
         jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
         jInternalFrame1Layout.setHorizontalGroup(
@@ -481,21 +490,10 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeATraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeATraiterValueChanged
         // TODO add your handling code here:
         int select = listeATraiter.getSelectedIndex();
-        listePhoto = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
-        ImageIcon Photo=s.getimage(listePhoto.get(0));// a modif
+        listePhoto = s.getRadio(donnePatientATraiter.elementAt(select * nbComposantes + 5));
         
-        
-        
-        
-        
-        // implementer l'ilmage que l'on veut choisir
-        
-        
-        
-        
-        
-        
-        
+        ImageIcon Photo=s.TransformeImage(listePhoto.get(0));
+                
         
         picture.setIcon(Photo);
         compteRendu.setText(donnePatientATraiter.elementAt(select * nbComposantes + 6));
@@ -508,31 +506,35 @@ public class hub_medecin_et_observateur extends javax.swing.JFrame {
     private void listeDejaTraiterValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listeDejaTraiterValueChanged
         // TODO add your handling code here:
         int select = listeDejaTraiter.getSelectedIndex();
-        listePhoto = s.getimages(donnePatientATraiter.elementAt(select * nbComposantes + 5));
+        listePhoto = s.getRadio(donnePatientATraiter.elementAt(select * nbComposantes + 5));
      
         
-        picture.setIcon(s.getimage(listePhoto.get(0)));
-        
-        
-        
-        
-        
-        //implementer l'image que l'on veut choisir
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        picture.setIcon(s.TransformeImage(listePhoto.get(0)));
         compteRendu.setText(donnePatientDejaTraiter.elementAt(select * nbComposantes + 6));
         idExamCourant = "dejatraite";
 
 
     }//GEN-LAST:event_listeDejaTraiterValueChanged
+
+    private void pictureMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pictureMouseDragged
+        // TODO add your handling code here:
+        
+         deplacementpixel=y-evt.getYOnScreen();
+      
+           if(deplacementpixel<-0.5 & imageselecteur>0){
+               imageselecteur--;
+            
+               
+           }else{
+              
+               if(deplacementpixel>0.5 & imageselecteur<listePhoto.size()-1){
+                   imageselecteur++;
+                
+               }
+           }
+        picture.setIcon(s.TransformeImage(listePhoto.get(imageselecteur)));
+        y=evt.getYOnScreen();
+    }//GEN-LAST:event_pictureMouseDragged
 
     /**
      * @param args the command line arguments

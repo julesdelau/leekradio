@@ -348,16 +348,17 @@ public class Sql_handler {
 
     }
 
-    public ArrayList<Blob> getimages(String idRadio) {
+    public ArrayList<byte[]> getRadio(String idRadio) {
         SeConnecter();
         String sql = "SELECT * FROM imagetest where  Groupe='"+idRadio+"'";
-        ArrayList<Blob> sortie= new ArrayList();
+        ArrayList<byte[]> sortie= new ArrayList();
         try {
             st = connection.createStatement();
             rs = st.executeQuery(sql);
             while(rs.next()){
-                sortie.add(rs.getBlob(2));
+                sortie.add(rs.getBlob(2).getBytes(1, (int)rs.getBlob(2).length()));
             }
+            quit();
             return sortie;
             // Créer un flux d'entrée à partir du tableau d'octets
            /*

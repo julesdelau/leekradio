@@ -144,13 +144,11 @@ int imageselecteur=0;
       
            if(deplacementpixel<-1 & imageselecteur>0){
                imageselecteur--;
-          
-               
+   
            }else{
               
-               if(deplacementpixel>1 & imageselecteur<valueMap.get(key).size()-1){
+               if(deplacementpixel>1 & imageselecteur<valueMap.get(key).size()-2){
                    imageselecteur++;
-                
                }
            }
        

@@ -25,13 +25,7 @@ public class Clone {
             }
         });
         
-        //test remplissage table
-        Sql_handler h = new Sql_handler();
-       
-       
-        Map<String, ArrayList<byte[]>> valueMap ;
-        valueMap=h.GetAllImages();
-   
+     
      
     }
 }

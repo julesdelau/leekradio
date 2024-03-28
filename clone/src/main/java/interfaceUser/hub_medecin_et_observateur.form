@@ -400,6 +400,9 @@
             <Component class="java.awt.TextArea" name="compteRendu">
             </Component>
             <Component class="javax.swing.JLabel" name="picture">
+              <Events>
+                <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="pictureMouseDragged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
